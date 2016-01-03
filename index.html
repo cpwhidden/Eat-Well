@@ -1,0 +1,81 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="assets/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="assets/bootstrap-theme.css">
+	<link rel="stylesheet" type="text/css" href="assets/style.css">
+</head>
+<body>
+	<main id="app" class="container">
+		<section id="title" class="banner">
+			<div id="title-inner" class="col-md-12 col-xs-12">
+				Title
+			</div>
+		</section>
+		<section id="food-consumption" class="prominent-section">
+			<section id="day-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
+				<div id="day-view" class="content-div">
+					<div id="nav-bar" class="btn-group">
+						Row of buttons
+						<button id="addItem">Add</button>
+					</div>
+					<select id="food-search" class="select2-box">
+
+					</select>
+					<div id="food-list">
+						<ul></ul>
+						Day View
+					</div>
+					<div id="filter-bar" class="btn-group">
+						Filter buttons
+					</div>
+				</div>
+				<div id="day-chart" class="content-div">
+					Day Chart
+				</div>
+			</section>
+			<section id="week-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
+				<div id="week-view" class="content-div">
+					Week View
+				</div>
+				<div id="week-chart" class="content-div">
+					Week Chart
+				</div>
+			</section>
+			<section id="month-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
+				<div id="month-view" class="content-div">
+					Month View
+				</div>
+				<div id="month-chart" class="content-div">
+					Month Chart
+				</div>
+			</section>
+		</section>
+		<section id="supplementary-info" class="">
+			<div id="news-articles" class="col-xs-12 col-sm-6 content-div">
+				Articles
+			</div>
+			<div id="recipes" class="col-xs-12 col-sm-6 content-div">
+				Recipes
+			</div>
+		</section>
+	</main>
+	<script id="food-item" type="text/template">
+		<%= name %>
+	</script>
+	<script src="js/lib/jquery-1.11.3.js"></script>
+	<script src="js/lib/underscore.js"></script>
+	<script src="js/lib/backbone.js"></script>
+	<script src="js/lib/backbone.localStorage.js"></script>
+	<script src="js/models.js"></script>
+	<script src="js/collections.js"></script>
+	<script src="js/router.js"></script>
+	<script src="js/views.js"></script>
+</body>
+
+
+</html>
+	
+<!-- Needs Bootstrap, D3 graphs/calendar or some other graphing framework, Underscore.js, Backbone.js, Firebase, BackboneFire-->
+<!-- Use npm/grunt for images and js minification -->
