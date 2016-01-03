@@ -55,7 +55,7 @@ section {
 #day-view {
 	display: flex;
 	flex-direction: column;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 }
 
 .content-div {

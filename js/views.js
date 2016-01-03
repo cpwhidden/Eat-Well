@@ -1,34 +1,34 @@
 var app = app || {};
-
 // Views
 
 
 // App View
 app.AppView = Backbone.View.extend({
 	el: '#app',
-	currentDate : new Date(),
 	events : {
 		'click #addItem' : 'addItem'
 	},
 
 	initialize : function() {
-		console.log('initializing app view');
 		_.bindAll(this, 'render');
 
-		this.listenTo(this.currentDate, 'change', this.navigate);
+		this.listenTo(app.config.attributes.currentDate, 'change', this.dateChanged);
 
 		app.ConsumptionHistory.fetch();
-		new app.FoodItemList();
+		this.dayView = new app.DayView().render();
 	},
 
-	navigate : function() {
-		console.log('navigating');
+	dateChanged : function() {
 		app.DayFilter.navigate(this.currentDate.getYear() + '/' + this.currentDate.getMonth() + '/' + this.currentDate.getDay(), {trigger: false});
+		this.render();
+	},
+
+	render : function() {
+		this.dayView.render();
 	},
 
 	addItem : function() {
 		app.ConsumptionHistory.add(new app.FoodItem({name: "Hello World"}));
-		console.log(app.ConsumptionHistory.length);
 	}
 
 });
@@ -45,7 +45,6 @@ app.FoodItemView = Backbone.View.extend({
 	},
 
 	render : function() {
-		console.log('rendering item view');
 		this.$el.html(this.template(this.model.attributes));
 		return this;
 	}
@@ -59,17 +58,19 @@ app.FoodItemList = Backbone.View.extend({
 	initialize : function() {
 		_.bindAll(this, 'render', 'appendItem');
 		
-		this.collection.bind('add', this.appendItem);
+		this.collection.bind('change add', this.render);
+	},
+
+	render : function() {
+		var filtered = this.collection.models.filter(function(item) {
+			return datesMatch(app.config.attributes.currentDate, item.attributes.date);
+		}, this);
+		filtered.forEach(this.appendItem);
 	},
 
 	appendItem : function(item) {
-		console.log(this.collection);
-		console.log(item.attributes);
-		console.log('appending to food item list');
 		var itemView = new app.FoodItemView({model: item});
 		var el = itemView.render().el;
-		console.log(itemView);
-		console.log($('ul', this.el));
 		$('ul', this.el).append(itemView.render().el);
 	}
 })
@@ -97,31 +98,26 @@ app.DayView = Backbone.View.extend({
 	el: '#day-view',
 
 	initialize : function() {
-		console.log('initializing day view');
-		_.bindAll(this, 'render', 'goToDate');
+		_.bindAll(this, 'render');
 		this.$foodList = this.$('#food-list');
 
 		this.listenTo(app.currentDate, 'change', this.goToDate);
+		this.foodItemList = new app.FoodItemList();
+		this.render();
 	},
 
-	goToDate : function() {
-		this.$foodList.html('');
-		var currentDate = app.AppView.currentDate;
-		var foodItemsForCurrentDay = _.filter(app.ConsumptionHistory, function() {
-			var dateMatches = this.date.getYear() == currentDate.getYear() && this.date.getMonth() == currentDate.getMonth() && this.date.getDate() == currentDate.getDate();
-			return dateMatches;
-		})
-		foodItemsForCurrentDay.each(this.addFoodItemView, this);
-	},
-
-	addFoodItemView : function(foodItem) {
-		var view = new FoodItemView({model: foodItem});
-		this.$foodList.append(view);
+	render : function() {
+		this.foodItemList.render();
 	}
 });
 
+datesMatch = function(date1, date2) {
+	return date1.getFullYear() == date2.getFullYear() 
+		&& date1.getMonth() == date2.getMonth() 
+		&& date1.getDate() == date2.getDate();
+} 
+
 // Connect app logic to the DOM
 $(function() {
-	console.log('initializing app');
 	new app.AppView();
 });
