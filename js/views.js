@@ -50,6 +50,24 @@ app.FoodItemView = Backbone.View.extend({
 	}
 });
 
+// ResultFoodView
+// This view is only used to render the static returns of the Nutritionix API
+// The Select2 box manages the 'collection' for these views with its built-in functions
+app.ResultFoodView = Backbone.View.extend({
+	tagName: 'li',
+
+	template : _.template($('#food-item').html()),
+
+	initialize : function() {
+		_.bindAll(this, 'render');
+	},
+
+	render : function() {
+		this.$el.html(this.template(this.model.attributes));
+		return this;
+	}
+})
+
 // FoodItemList
 app.FoodItemList = Backbone.View.extend({
 	el: $('#food-list'),
@@ -73,7 +91,7 @@ app.FoodItemList = Backbone.View.extend({
 		var el = itemView.render().el;
 		$('ul', this.el).append(itemView.render().el);
 	}
-})
+});
 
 // Month View
 app.MonthView = Backbone.View.extend({

@@ -11,12 +11,11 @@ app.FoodItem = Backbone.Model.extend({
 		saturatedFat : 0,
 		monounsaturatedFat : 0,
 		polyunsaturatedFat : 0,
+		transFat : 0,
 		carbohydrates : 0,
 		dietaryFiber : 0,
 		sugar : 0,
 		protein : 0,
-		sodium : 0,
-		cholesterol : 0,
 		quantity : 0,
 		unit : ''
 	}
