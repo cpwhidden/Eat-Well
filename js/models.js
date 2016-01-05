@@ -51,3 +51,4 @@ app.Config = Backbone.Model.extend({
 })
 
 app.config = new app.Config();
+console.log('after config initialization', app.config.get("currentDate"));

@@ -9,15 +9,18 @@ app.AppView = Backbone.View.extend({
 	initialize : function() {
 		_.bindAll(this, 'render');
 
-		this.listenTo(app.config.attributes.currentDate, 'change', this.dateChanged);
-
+		this.listenTo(app.config, 'change:currentDate', this.dateChanged);
+		console.log('dateChanged', app.config.get("currentDate"));
 		app.ConsumptionHistory.fetch();
-		this.dayView = new app.DayView().render();
+		this.dayView = new app.DayView()
+		this.dayView.render();
 	},
 
 	dateChanged : function() {
-		app.DayFilter.navigate(this.currentDate.getYear() + '/' + this.currentDate.getMonth() + '/' + this.currentDate.getDay(), {trigger: false});
+		console.log('date changed');
+		app.DayFilter.navigate(app.config.get("currentDate").getFullYear() + '/' + (app.config.get("currentDate").getMonth() + 1) + '/' + (app.config.get("currentDate").getDay()+1), {trigger: false});
 		this.render();
+		this.dayView.render();
 	},
 
 	render : function() {
@@ -45,9 +48,36 @@ app.FoodItemView = Backbone.View.extend({
 	}
 });
 
+// FoodItemList - "Collection" view for FoodItemView
+app.FoodItemList = Backbone.View.extend({
+	el: $('#food-list-div'),
+	collection : app.ConsumptionHistory,
+
+	initialize : function() {
+		_.bindAll(this, 'render', 'appendItem');
+		
+		this.collection.bind('change', this.render);
+		this.collection.bind('add', this.appendItem);
+		// this.collection.bind('remove', this.removeItem);
+	},
+
+	render : function() {
+		$('ul', this.el).html('');
+		var filtered = this.collection.models.filter(function(item) {
+			return datesMatch(app.config.attributes.currentDate, item.attributes.date);
+		}, this);
+		filtered.forEach(this.appendItem);
+		return this;
+	},
+
+	appendItem : function(item) {
+		var itemView = new app.FoodItemView({model: item});
+		var el = itemView.render().el;
+		$('ul', this.el).append(itemView.render().el);
+	}
+});
+
 // ResultFoodView
-// This view is only used to render the static returns of the Nutritionix API
-// The Select2 box manages the 'collection' for these views with its built-in functions
 app.ResultFoodView = Backbone.View.extend({
 	tagName: 'div',
 
@@ -64,7 +94,7 @@ app.ResultFoodView = Backbone.View.extend({
 	}
 });
 
-// Food Search View
+// Food Search View - "Collection" view for ResultFoodView
 app.FoodSearchView = Backbone.View.extend({
 	el: $('#food-search'),
 	collection: app.FoodSearchList,
@@ -78,33 +108,6 @@ app.FoodSearchView = Backbone.View.extend({
 		console.log(food.params.data.id);
 		console.log(this.collection);
 		app.ConsumptionHistory.add(this.collection.where({id: food.params.data.id}));
-	}
-});
-
-// FoodItemList
-app.FoodItemList = Backbone.View.extend({
-	el: $('#food-list-div'),
-	collection : app.ConsumptionHistory,
-
-	initialize : function() {
-		_.bindAll(this, 'render', 'appendItem');
-		
-		this.collection.bind('change', this.render);
-		this.collection.bind('add', this.appendItem);
-		// this.collection.bind('remove', this.removeItem);
-	},
-
-	render : function() {
-		var filtered = this.collection.models.filter(function(item) {
-			return datesMatch(app.config.attributes.currentDate, item.attributes.date);
-		}, this);
-		filtered.forEach(this.appendItem);
-	},
-
-	appendItem : function(item) {
-		var itemView = new app.FoodItemView({model: item});
-		var el = itemView.render().el;
-		$('ul', this.el).append(itemView.render().el);
 	}
 });
 
@@ -131,10 +134,16 @@ app.DayView = Backbone.View.extend({
 	el: '#day-view',
 
 	initialize : function() {
+		console.log('currentDate', app.config.get("currentDate"));
 		_.bindAll(this, 'render');
 		this.$foodList = this.$('#food-list');
+		this.$previousDay = this.$('#previous-day-button');
+		this.$today = this.$('#goto-today-button');
+		this.$nextDay = this.$('#next-day-button');
 
-		this.listenTo(app.currentDate, 'change', this.goToDate);
+		this.$previousDay.on('click', this.gotoPreviousDay);
+		this.$today.on('click', this.gotoToday);
+		this.$nextDay.on('click', this.nextDay);
 		this.foodItemList = new app.FoodItemList();
 		this.foodSearchView = new app.FoodSearchView();
 		this.render();
@@ -142,6 +151,21 @@ app.DayView = Backbone.View.extend({
 
 	render : function() {
 		this.foodItemList.render();
+	},
+
+	gotoPreviousDay : function() {
+		var newDate = new Date(app.config.get("currentDate").getTime() - (24*60*60*1000));
+		app.config.set({currentDate: newDate});
+	},
+
+	gotoToday : function() {
+		var newDate = new Date();
+		app.config.set({currentDate: newDate});
+	},
+
+	nextDay : function() {
+		var newDate = new Date(app.config.get("currentDate").getTime() + (24*60*60*1000));
+		app.config.set({currentDate: newDate});
 	}
 });
 
@@ -153,5 +177,6 @@ datesMatch = function(date1, date2) {
 
 // Connect app logic to the DOM
 $(function() {
+	console.log('before app view', app.config.get('currentDate'));
 	new app.AppView();
 });
