@@ -12,8 +12,10 @@ app.AppView = Backbone.View.extend({
 		this.listenTo(app.config, 'change:currentDate', this.dateChanged);
 		console.log('dateChanged', app.config.get("currentDate"));
 		app.ConsumptionHistory.fetch();
-		this.dayView = new app.DayView()
+		this.dayView = new app.DayView();
+		this.weekView = new app.WeekView();
 		this.dayView.render();
+		this.weekView.render();
 	},
 
 	dateChanged : function() {
@@ -21,10 +23,12 @@ app.AppView = Backbone.View.extend({
 		app.DayFilter.navigate(app.config.get("currentDate").getFullYear() + '/' + (app.config.get("currentDate").getMonth() + 1) + '/' + (app.config.get("currentDate").getDay()+1), {trigger: false});
 		this.render();
 		this.dayView.render();
+		this.weekView.render();
 	},
 
 	render : function() {
 		this.dayView.render();
+		this.weekView.render();
 	}
 });
 
@@ -126,7 +130,28 @@ app.WeekView = Backbone.View.extend({
 
 	initialize : function() {
 		_.bindAll(this, 'render');
+		this.$weekDayList = $('#week-day-list');
+		this.render();
+	},
+
+	render : function() {
+		// Get dates for all days of currentDate week
+		var dates = this.weekDatesForDate(app.config.get("currentDate"));
+		console.log('dates', dates);
+		// Find aggregrate calorie info for each day
+		// Append template html
+	},
+
+	weekDatesForDate : function(date) {
+		var dates = [];
+		var dayOfWeek = date.getDay();
+		for (var i = 0; i < 7; i++) {
+			var newDate = new Date(date.getTime() + ((i - dayOfWeek) * 86400000));
+			dates.push(newDate);
+		}
+		return dates;
 	}
+
 });
 
 // Day View
@@ -154,7 +179,7 @@ app.DayView = Backbone.View.extend({
 	},
 
 	gotoPreviousDay : function() {
-		var newDate = new Date(app.config.get("currentDate").getTime() - (24*60*60*1000));
+		var newDate = new Date(app.config.get("currentDate").getTime() - 86400000);
 		app.config.set({currentDate: newDate});
 	},
 
@@ -164,7 +189,7 @@ app.DayView = Backbone.View.extend({
 	},
 
 	nextDay : function() {
-		var newDate = new Date(app.config.get("currentDate").getTime() + (24*60*60*1000));
+		var newDate = new Date(app.config.get("currentDate").getTime() + 86400000);
 		app.config.set({currentDate: newDate});
 	}
 });
@@ -173,7 +198,7 @@ datesMatch = function(date1, date2) {
 	return date1.getFullYear() == date2.getFullYear() 
 		&& date1.getMonth() == date2.getMonth() 
 		&& date1.getDate() == date2.getDate();
-} 
+};
 
 // Connect app logic to the DOM
 $(function() {
