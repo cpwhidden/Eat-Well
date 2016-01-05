@@ -5,9 +5,6 @@ var app = app || {};
 // App View
 app.AppView = Backbone.View.extend({
 	el: '#app',
-	events : {
-		'click #addItem' : 'addItem'
-	},
 
 	initialize : function() {
 		_.bindAll(this, 'render');
@@ -25,19 +22,16 @@ app.AppView = Backbone.View.extend({
 
 	render : function() {
 		this.dayView.render();
-	},
-
-	addItem : function() {
-		app.ConsumptionHistory.add(new app.FoodItem({name: "Hello World"}));
 	}
-
 });
 
 // FoodItemView
 app.FoodItemView = Backbone.View.extend({
 	tagName: 'li',
 
-	template : _.template($('#food-item').html()),
+	className: 'consumed-food-list-item',
+
+	template : _.template($('#consumed-food-template').html()),
 
 	initialize : function() {
 		_.bindAll(this, 'render');
@@ -45,6 +39,7 @@ app.FoodItemView = Backbone.View.extend({
 	},
 
 	render : function() {
+		this.$el.toggleClass('consumed-food');
 		this.$el.html(this.template(this.model.attributes));
 		return this;
 	}
@@ -54,9 +49,9 @@ app.FoodItemView = Backbone.View.extend({
 // This view is only used to render the static returns of the Nutritionix API
 // The Select2 box manages the 'collection' for these views with its built-in functions
 app.ResultFoodView = Backbone.View.extend({
-	tagName: 'li',
+	tagName: 'div',
 
-	template : _.template($('#food-item').html()),
+	template : _.template($('#food-result').html()),
 
 	initialize : function() {
 		_.bindAll(this, 'render');
@@ -64,19 +59,39 @@ app.ResultFoodView = Backbone.View.extend({
 
 	render : function() {
 		this.$el.html(this.template(this.model.attributes));
+		this.$el.toggleClass('select2-result');
 		return this;
+	},
+});
+
+// Food Search View
+app.FoodSearchView = Backbone.View.extend({
+	el: $('#food-search'),
+	collection: app.FoodSearchList,
+
+	initialize : function () {
+		_.bindAll(this, 'resultSelected');
+		$('#food-search').on('select2:select', this.resultSelected);
+	},
+
+	resultSelected : function(food) {
+		console.log(food.params.data.id);
+		console.log(this.collection);
+		app.ConsumptionHistory.add(this.collection.where({id: food.params.data.id}));
 	}
-})
+});
 
 // FoodItemList
 app.FoodItemList = Backbone.View.extend({
-	el: $('#food-list'),
+	el: $('#food-list-div'),
 	collection : app.ConsumptionHistory,
 
 	initialize : function() {
 		_.bindAll(this, 'render', 'appendItem');
 		
-		this.collection.bind('change add', this.render);
+		this.collection.bind('change', this.render);
+		this.collection.bind('add', this.appendItem);
+		// this.collection.bind('remove', this.removeItem);
 	},
 
 	render : function() {
@@ -121,6 +136,7 @@ app.DayView = Backbone.View.extend({
 
 		this.listenTo(app.currentDate, 'change', this.goToDate);
 		this.foodItemList = new app.FoodItemList();
+		this.foodSearchView = new app.FoodSearchView();
 		this.render();
 	},
 

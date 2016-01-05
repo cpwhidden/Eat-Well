@@ -4,6 +4,7 @@ var app = app || {};
 // FoodItem
 app.FoodItem = Backbone.Model.extend({
 	defaults : {
+		id : "",
 		date : new Date(),
 		name : 'Food',
 		calories : 0,

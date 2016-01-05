@@ -1,29 +1,32 @@
+// $('#food-search').select2();
+
 $('#food-search').select2({
   ajax: {
     url: function(params) {
-      console.log(params);
       var url = 'https://api.nutritionix.com/v1_1/search/' + (params.term ? params.term : '');
-      console.log(url);
       return url;
     },
     dataType: 'json',
-    delay: 100,
+    delay: 250,
     data: function (params) {
       return {
-        results: resultRangeForPage(params.page ? params.page : 0, 15),
+        // results: resultRangeForPage(params.page ? params.page : 0, 15),
         appId: '0b6341e3',
         appKey: '8e568e8713b5c153220709a08b308919',
-        fields: 'item_name,nf_calories,nf_total_fat,nf_saturated_fat,nf_monounsaturated_fat,nf_polyunsaturated_fat,nf_trans_fatty_acid,nf_total_carbohydrate,nf_dietary_fiber,nf_sugars,nf_protein,nf_serving_size_qty,nf_serving_size_unit,images_front_full_url'
+        fields: 'item_name,nf_calories,nf_total_fat,nf_saturated_fat,nf_monounsaturated_fat,nf_polyunsaturated_fat,nf_trans_fatty_acid,nf_total_carbohydrate,nf_dietary_fiber,nf_sugars,nf_protein,nf_serving_size_qty,nf_serving_size_unit'
       };
     },
     processResults: function (data, params) {
-      console.log(data);
+      // Clear FoodSearchList if page is 1 or undefined
+
+      data.hits.forEach(function(item) {
+        item.id = item._id;
+      })
       // parse the results into the format expected by Select2
       // since we are using custom formatting functions we do not need to
       // alter the remote JSON data, except to indicate that infinite
       // scrolling can be used
       params.page = params.page || 1;
- 
       return {
         results: data.hits,
         pagination: {
@@ -40,26 +43,13 @@ $('#food-search').select2({
   templateSelection: formatFoodSelection
 });
 
+// $('#food-search').on("select2:select", function (e) { console.log($('#food-search').select2('data')); });
+
 function formatFood (food) {
-  console.log(food);
-  if (food.loading) return food.item_name;
+  if (!food.id || food.loading) return food.text;
 
-  // var markup = "<div class='select2-result-repository clearfix'>" +
-  //              "<div class='select2-result-repository__avatar'><img src='" + food.images_front_full_url + "' /></div>" +
-  //   "<div class='select2-result-repository__meta'>" +
-  //     "<div class='select2-result-repository__title'>" + repo.full_name + "</div>";
-
-  // if (repo.description) {
-  //   markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
-  // }
-
-  // markup += "<div class='select2-result-repository__statistics'>" +
-  //   "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
-  //   "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
-  //   "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
-  // "</div>" +
-  // "</div></div>";
   var foodItem = new app.FoodItem({
+    id : food.id,
     date : app.currentDate,
     name : food.fields.item_name,
     calories : food.fields.nf_calories,
@@ -72,19 +62,20 @@ function formatFood (food) {
     sugar : food.fields.nf_sugars,
     protein : food.fields.nf_protein,
     quantity : food.fields.nf_serving_size_qty,
-    unit : food.fields.nf_serving_size_unit
+    unit : food.fields.nf_serving_size_unit,
   });
+  app.FoodSearchList.add(foodItem);
   var markup = new app.ResultFoodView({model: foodItem}).render().el;
 
   return markup;
 }
 
 function formatFoodSelection (food) {
-  return food.item_name;
+  // if (!food.id) return food.text;
+  // return food.fields.item_name;
+  return 'Food Lookup';
 }
 
 function resultRangeForPage(page, rpp) {
-  console.log(page);
-  console.log(rpp);
   return page * rpp + ':' + (page * rpp + rpp);
 }

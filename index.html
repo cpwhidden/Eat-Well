@@ -12,8 +12,12 @@
 <body>
 	<main id="app" class="container">
 		<section id="title" class="banner">
-			<div id="title-inner" class="col-md-12 col-xs-12">
-				Eat Well
+			<div id="title-inner" class="col-md-12 col-xs-12 banner-inner">
+				<div id="title-icon">
+				</div>
+				<div id="title-name">
+					<h1>Eat Well</h1>
+				</div>
 			</div>
 		</section>
 		<section id="food-consumption" class="prominent-section">
@@ -21,13 +25,13 @@
 				<div id="day-view" class="content-div">
 					<div id="nav-bar" class="btn-group">
 						Row of buttons
-						<button id="addItem">Add</button>
 					</div>
-					<select id="food-search" class="select2-box">
+					<select id="food-search" class="select2-box" style="width: 100%"> <!-- Select2 Box does not work with CSS width set -->
 					</select>
-					<div id="food-list">
-						<ul></ul>
-						Day View
+					Eaten Today
+					<div id="food-list-div">
+						<ul id="food-list">
+						</ul>
 					</div>
 					<div id="filter-bar" class="btn-group">
 						Filter buttons
@@ -54,7 +58,7 @@
 				</div>
 			</section>
 		</section>
-		<section id="supplementary-info" class="">
+		<section id="supplementary-info" class="select2-result">
 			<div id="news-articles" class="col-xs-12 col-sm-6 content-div">
 				Articles
 			</div>
@@ -63,8 +67,29 @@
 			</div>
 		</section>
 	</main>
-	<script id="food-item" type="text/template">
-		<%= name %>
+	<script id="consumed-food-template" type="text/template">
+		<div class="consumed-food-item">
+			<div class="food-result-main-content">
+				<div class="food-result-name">
+					<%= name %>
+				</div>
+				<div class="food-result-detail">
+					<%= quantity + ' ' + unit %>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script id="food-result" type="text/template">
+		<div class="food-result">
+			<div class="food-result-main-content">
+				<div class="food-result-name">
+					<%= name %>
+				</div>
+				<div class="food-result-detail">
+					<%= quantity + ' ' + unit %>
+				</div>
+			</div>
+		</div>
 	</script>
 	<script src="js/lib/jquery-1.11.3.js"></script>
 	<script src="js/lib/underscore.js"></script>

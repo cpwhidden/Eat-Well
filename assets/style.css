@@ -61,8 +61,37 @@ section {
 .content-div {
 	overflow: scroll;
 	height:400px;
+	text-align: center;
 }
 
+.consumed-food-list-item {
+	display: block;
+}
+
+.banner-inner {
+	height: 100%;
+}
+
+#food-list {
+	padding: 2px;
+}
+
+#food-search {
+	height: 40px;
+}
+
+#nav-bar {
+	height: 40px;
+}
+
+#filter-bar {
+	height: 40px;
+}
+
+#food-list-div {
+	height: calc(100% - 40px - 40px - 40px);
+	overflow: scroll;
+}
 
 /*Responsive media queries*/
 @media screen and (min-width: 992px) {

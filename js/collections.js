@@ -11,9 +11,10 @@ app.ConsumptionHistoryCollection = Backbone.Collection.extend({
 app.ConsumptionHistory = new app.ConsumptionHistoryCollection();
 
 // Food search list (from Nutritionix API)
-app.FoodSearchList = Backbone.Collection.extend({
+app.FoodSearchListCollection = Backbone.Collection.extend({
 	model : app.FoodItem,
 })
+app.FoodSearchList = new app.FoodSearchListCollection();
 
 // Trending recipes (food2fork.com)
 app.Recipes = Backbone.Collection.extend({
