@@ -15,6 +15,10 @@ section {
 /*	overflow: hidden;*/
 }
 
+h2, h3 {
+	margin-top: 2px;
+}
+
 .row > div {
 	height: 100%;
 	max-height: 100%;

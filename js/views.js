@@ -61,7 +61,7 @@ app.ResultFoodView = Backbone.View.extend({
 		this.$el.html(this.template(this.model.attributes));
 		this.$el.toggleClass('select2-result');
 		return this;
-	},
+	}
 });
 
 // Food Search View
