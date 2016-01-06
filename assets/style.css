@@ -1,5 +1,6 @@
 body {
 	background-color: #111130;
+	color: #111130;
 }
 
 section, div {
@@ -15,8 +16,17 @@ section {
 /*	overflow: hidden;*/
 }
 
-h2, h3 {
+h1, h2, h3 {
 	margin: 2px;
+	color: #111130;
+}
+
+.btn {
+	color: #111130;
+}
+
+.btn:hover {
+	color: #222260;
 }
 
 .row > div {

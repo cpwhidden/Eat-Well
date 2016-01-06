@@ -46,6 +46,22 @@
 			<section id="week-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
 				<div id="week-view" class="content-div">
 					<h2>Week View</h2>
+					<div id="week-day-list">
+						<div id="sunday">
+						</div>
+						<div id="monday">
+						</div>
+						<div id="tuesday">
+						</div>
+						<div id="wednesday">
+						</div>
+						<div id="thursday">
+						</div>
+						<div id="friday">
+						</div>
+						<div id="saturday">
+						</div>
+					</div>
 				</div>
 				<div id="week-chart" class="content-div">
 					<h2>Week Chart</h2>
@@ -61,11 +77,13 @@
 			</section>
 		</section>
 		<section id="supplementary-info" class="select2-result">
-			<div id="news-articles" class="col-xs-12 col-sm-6 content-div">
+			<div id="article-list" class="col-xs-12 col-sm-6 content-div">
 				<h2>Articles</h2>
+				<ul></ul>
 			</div>
-			<div id="recipes" class="col-xs-12 col-sm-6 content-div">
+			<div id="recipe-list" class="col-xs-12 col-sm-6 content-div">
 				<h2>Recipes</h2>
+				<ul></ul>
 			</div>
 		</section>
 	</main>
@@ -91,6 +109,40 @@
 					<%= quantity + ' ' + unit %>
 				</div>
 			</div>
+		</div>
+	</script>
+	<script id="week-day-template" type="text/template">
+		<div class="week-day">
+			<div class="week-day-name">
+				<%= name %>
+			</div>
+			<div class="week-day-total-calories">
+				<%= calories ? calories : 0 %> calories
+			</div>
+		</div>
+	</script>
+	<script id="article-template" type="text/template">
+		<div class="article">
+			<span class="headline">
+				<a href="<%= url %>">
+					<%= headline %>
+				</a>
+			</span>
+			<span class="snippet">
+				<%= snippet %>
+			</span>
+		</div>
+	</script>
+	<script id="recipe-template" type="text/template">
+		<div class="recipe">
+			<span class="title">
+				<a href="<%= url %>">
+					<%= title %>
+				</a>
+			</span>
+			<span class="ranking">
+				Rank: <%= snippet %>
+			</span>
 		</div>
 	</script>
 	<script src="js/lib/jquery-1.11.3.js"></script>

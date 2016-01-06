@@ -26,14 +26,16 @@ app.FoodItem = Backbone.Model.extend({
 app.Recipe = Backbone.Model.extend({
 	defaults : {
 		name : 'Recipe',
-		url : 'food2fork.com'
+		url : 'food2fork.com',
+		rank : '0'
 	}
 })
 
 // Article
 app.Article = Backbone.Model.extend({
 	defaults : {
-		name : 'Article',
+		headline : 'Headline',
+		snippet : 'Snippet',
 		url : 'nytimes.com'
 	}
 })
@@ -51,4 +53,3 @@ app.Config = Backbone.Model.extend({
 })
 
 app.config = new app.Config();
-console.log('after config initialization', app.config.get("currentDate"));

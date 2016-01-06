@@ -5,7 +5,8 @@ var app = app || {};
 // ConsumptionHistory
 app.ConsumptionHistoryCollection = Backbone.Collection.extend({
 	model : app.FoodItem,
-	localStorage: new Backbone.LocalStorage("ConsumptionHistory")
+	localStorage: new Backbone.LocalStorage("ConsumptionHistory"),
+	comparator : 'date'
 })
 
 app.ConsumptionHistory = new app.ConsumptionHistoryCollection();

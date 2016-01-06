@@ -20,7 +20,8 @@ $('#food-search').select2({
       // Clear FoodSearchList if page is 1 or undefined
 
       data.hits.forEach(function(item) {
-        item.id = item._id;
+        // Make ID for each food item
+        item.id = app.config.get('currentDate').getTime() + item._id;
       })
       // parse the results into the format expected by Select2
       // since we are using custom formatting functions we do not need to
@@ -47,10 +48,11 @@ $('#food-search').select2({
 
 function formatFood (food) {
   if (!food.id || food.loading) return food.text;
+  var currentDate = app.config.get('currentDate');
 
   var foodItem = new app.FoodItem({
     id : food.id,
-    date : app.currentDate,
+    date : app.config.get('currentDate'),
     name : food.fields.item_name,
     calories : food.fields.nf_calories,
     totalFat : food.fields.nf_total_fat,
@@ -64,6 +66,7 @@ function formatFood (food) {
     quantity : food.fields.nf_serving_size_qty,
     unit : food.fields.nf_serving_size_unit,
   });
+  console.log(foodItem);
   app.FoodSearchList.add(foodItem);
   var markup = new app.ResultFoodView({model: foodItem}).render().el;
 
