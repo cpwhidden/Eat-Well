@@ -362,29 +362,22 @@ app.RecipeListView = Backbone.View.extend({
 	request : function() {
 		var self = this;
 		$('ul', self.el).html('');
-		$.ajax({
-			url : 'http://food2fork.com/api/search?key=623ea969c56dc75bd5e217313b50b7d7&sort=t', 
-			success : function(data) {
-				console.log('success');
-				var count = data.count;
-				var recipesToTake = Math.min(count, 5);
-				for (var i = 0; i < recipesToTake; i++) {
-					var recipe = data.recipes[i];
-					var title = recipe.title;
-					var url = recipe.source_url ? recipe.source_url : f2f_url;
-					var rank = recipe.social_rank;
-					var recipeModel = new Recipe({
-						title : title,
-						url : url,
-						rank : rank
-					})
-					var recipeView = new RecipeView({model: recipeModel});
-					$('ul', self.$el).append(articleView.render().el);
-				}
-			},
-			dataType: 'json',
-			error : function(xhr, status, error) {
-				console.log('error', xhr.responseText);
+		$.get('http://food2fork.com/api/search?key=623ea969c56dc75bd5e217313b50b7d7&sort=t', function(data) {
+			console.log('success');
+			var count = data.count;
+			var recipesToTake = Math.min(count, 5);
+			for (var i = 0; i < recipesToTake; i++) {
+				var recipe = data.recipes[i];
+				var title = recipe.title;
+				var url = recipe.source_url ? recipe.source_url : f2f_url;
+				var rank = recipe.social_rank;
+				var recipeModel = new Recipe({
+					title : title,
+					url : url,
+					rank : rank
+				})
+				var recipeView = new RecipeView({model: recipeModel});
+				$('ul', self.$el).append(articleView.render().el);
 			}
 		});
 	},
