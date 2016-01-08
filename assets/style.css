@@ -122,8 +122,8 @@ h1, h2, h3 {
 }
 
 #food-list-div {
-	height: calc(100% - 30px - 40px - 22px - 30px /*- 40px*/);
-	overflow: scroll;
+/*	height: calc(100% - 30px - 40px - 22px - 30px);
+*/	overflow: scroll;
 }
 
 /*Responsive media queries*/
