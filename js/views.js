@@ -13,6 +13,7 @@ app.AppView = Backbone.View.extend({
 		app.ConsumptionHistory.fetch();
 		this.dayView = new app.DayView();
 		this.weekView = new app.WeekView();
+		this.monthView = new app.MonthView();
 		this.articleListView = new app.ArticleListView();
 		this.recipeListView = new app.RecipeListView();
 		this.dayChartView = new app.ChartView('day-chart-graphic', filteredCollectionForDay);
@@ -22,7 +23,6 @@ app.AppView = Backbone.View.extend({
 	},
 
 	dateChanged : function() {
-		console.log(app.config.get('currentDate'));
 		app.DayFilter.navigate(app.config.get('currentDate').getFullYear() + '/' + 
 							  (app.config.get('currentDate').getMonth() + 1) + '/' + 
 							  (app.config.get('currentDate').getDate()), {trigger: false});
@@ -32,6 +32,7 @@ app.AppView = Backbone.View.extend({
 	render : function() {
 		this.dayView.render();
 		this.weekView.render();
+		this.monthView.render();
 		this.articleListView.render();
 		this.recipeListView.render();
 		this.dayChartView.update();
@@ -127,16 +128,23 @@ app.FoodSearchView = Backbone.View.extend({
 
 // Month View
 app.MonthView = Backbone.View.extend({
-	el: '#month-view',
+	el: '#month-section',
 
 	initialize : function() {
 		_.bindAll(this, 'render');
+
+		this.$monthHeading = this.$('#month-heading');
+	},
+
+	render : function() {
+		this.$monthHeading.html('Month of ' + $.datepicker.formatDate('MM', app.config.get('currentDate')));
+		return this;
 	}
 });
 
 // Week View
 app.WeekView = Backbone.View.extend({
-	el: '#week-view',
+	el: '#week-section',
 	collection : app.ConsumptionHistory,
 
 	initialize : function() {
@@ -145,13 +153,19 @@ app.WeekView = Backbone.View.extend({
 		this.collection.bind('change', this.render);
 		this.collection.bind('add', this.render);
 
-		this.$weekDayList = $('#week-day-list');
+		this.$weekDayList = this.$('#week-day-list');
+		this.$weekHeading = this.$('#week-heading');
 		this.render();
 	},
 
 	render : function() {
 		// Get dates for all days of currentDate week
 		var dates = this.weekDatesForDate(app.config.get("currentDate"));
+
+		var currentDate = app.config.get('currentDate');
+		var sunday = new Date(currentDate.getTime() - currentDate.getDay() * 86400000);
+		this.$weekHeading.html('Week of ' + $.datepicker.formatDate('m/d', sunday));
+
 		// Find aggregrate calorie info for each day
 		var weekData = dates.map(function(date){
 			return consumptionHistoryForDate(date).reduce(function(previousValue, currentValue) {
@@ -212,11 +226,12 @@ app.WeekView = Backbone.View.extend({
 
 // Day View
 app.DayView = Backbone.View.extend({
-	el: '#day-view',
+	el: '#day-section',
 
 	initialize : function() {
 		_.bindAll(this, 'render');
 		this.$foodList = this.$('#food-list');
+		this.$dayHeading = this.$('#day-heading');
 		this.$previousDay = this.$('#previous-day-button');
 		this.$today = this.$('#goto-today-button');
 		this.$nextDay = this.$('#next-day-button');
@@ -230,7 +245,9 @@ app.DayView = Backbone.View.extend({
 	},
 
 	render : function() {
+		this.$dayHeading.text($.datepicker.formatDate('MM d, yy', app.config.get('currentDate')));
 		this.foodItemList.render();
+		return this;
 	},
 
 	gotoPreviousDay : function() {
@@ -240,7 +257,6 @@ app.DayView = Backbone.View.extend({
 
 	gotoToday : function() {
 		var newDate = new Date();
-		console.log(newDate);
 		app.config.set({currentDate: newDate});
 	},
 
@@ -270,7 +286,6 @@ filteredCollectionForDay = function(collection, date) {
 };
 
 weeksMatch = function(date1, date2) {
-	console.log(date1, date2);
 	return date1.getFullYear() == date2.getFullYear() 
 		&& date1.getMonth() == date2.getMonth()
 		&& (date1.getDay() - date2.getDay()) == (date1.getDate() - date2.getDate());
@@ -328,7 +343,7 @@ app.ArticleListView = Backbone.View.extend({
 
 	request : function() {
 		var self = this;
-		$('ul', self.el).html('');
+		$('ul', self.$el).html('');
 		$.getJSON('http://api.nytimes.com/svc/search/v2/articlesearch.json?q=""' + 
 			'")&api-key=a40e519f6eef4efd9bdbf97fcec6af22:19:61005771&fq=news_desk:("Food" "Health")', function(data) {
 				$('#articles-attribution').html('<img src="assets/images/poweredby_nytimes_200c.png">');
@@ -421,7 +436,6 @@ app.ChartView = Backbone.View.extend({
 	collection: app.ConsumptionHistory,
 
 	initialize : function(elementID, filter) {
-		console.log('init chart view');
 		_.bindAll(this, 'render', 'update', 'getData', 'width', 'height', 'circleCenterX', 'circleCenterY');
 		this.el = document.getElementById(elementID);
 		this.margin = 50;
@@ -438,19 +452,15 @@ app.ChartView = Backbone.View.extend({
 	render : function() {
 		var data = this.getData();
 		var totalGrams = data.carbohydrates + data.fat + data.protein;
-		console.log('data', data);
 		this.radius = Math.min(this.width() / 2, this.height() / 2);
-		console.log('radius', this.radius);
 		this.circle = this.paper.circle(this.width() / 2, this.height() / 2, this.radius);
 		this.circle.attr({
 			'fill': '#D80',
 			'stroke': '',
 			'opacity': 0.2 + data.calories / this.recommendedCalories / 0.8,
 		});
-		console.log('circle center', this.circleCenterX(), this.circleCenterY());
 		this.text = this.paper.text(this.width() / 2, this.height() / 2 - 10, data.calories.toFixed(0) + '\ncalories');
 		this.text.attr({'font-family' : 'sans-serif', 'font-size' : 40, 'font-weight' : 300, 'fill' : '#fff'});
-		console.log(this.height(), this.radius, this.margin, this.strokeWidth);
 		this.carbohydrates = this.paper.path().attr({
 			'stroke': '#F55',
 			'stroke-width': this.strokeWidth, 
@@ -463,7 +473,6 @@ app.ChartView = Backbone.View.extend({
 			'stroke-linecap': 'round',
 			'arc': [this.circleCenterX(), this.circleCenterY(), data.carbohydrates, data.fat , totalGrams, this.radius - this.strokeWidth / 2]
 		});
-		console.log('carbo', this.carbohydrates);
 		this.protein = this.paper.path().attr({
 			'stroke': '#5F5',
 			'stroke-width': this.strokeWidth,
@@ -489,7 +498,6 @@ app.ChartView = Backbone.View.extend({
 	},
 
 	pieArc : function(xCenter, yCenter, preceedingTotal, value, totalValue, radius) {
-		console.log('pieArc params', xCenter, yCenter, preceedingTotal, value, totalValue, radius);
 		var startingDegreeAngle = -90 - 360 * preceedingTotal / totalValue;
 		var degreeAngle = -360 * value / totalValue;
 		var startingRadians = startingDegreeAngle * Math.PI / 180;
@@ -502,18 +510,12 @@ app.ChartView = Backbone.View.extend({
 		} else {
 			var sourceX = xCenter + radius * Math.cos(startingRadians);
 			var sourceY = yCenter + radius * Math.sin(startingRadians);
-			console.log('source x y', sourceX, sourceY);
 			var destinationX = xCenter + radius * Math.cos(startingRadians + radians);
 			var destinationY = yCenter + radius * Math.sin(startingRadians + radians);
-			console.log('destination x y', destinationX, destinationY);
-			console.log(radians);
-			console.log(degreeAngle);
-			console.log(Math.sin(radians));
 			var path = {
 				path: [['M', sourceX, sourceY],
 						['A', radius, radius, 0, ((value / totalValue) > 0.5 ? 1 : 0), 0, destinationX, destinationY]]
 			};
-			console.log('path', path);
 			return path;
 		}
 	},
@@ -547,16 +549,13 @@ app.ChartView = Backbone.View.extend({
 	},
 
 	getData : function() {
-		console.log(app.config.currentDate);
 		var filteredCollection = this.filter(this.collection, app.config.get('currentDate'));
-		console.log('filteredCollection', filteredCollection);
 		var data = filteredCollection.reduce(function(previousValue, currentValue) {
 			return {calories: previousValue.calories + currentValue.get('calories'), 
 				carbohydrates: previousValue.carbohydrates + currentValue.get('carbohydrates'), 
 				fat: previousValue.fat + currentValue.get('fat'), 
 				protein: previousValue.protein + currentValue.get('protein')};
 		}, {calories: 0, carbohydrates: 0, fat: 0, protein: 0});
-		console.log('retrieving data', data);
 		return data;
 	}
 })

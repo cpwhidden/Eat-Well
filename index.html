@@ -21,63 +21,69 @@
 		</section>
 		<section id="food-consumption" class="prominent-section">
 			<section id="day-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
-				<div id="day-view" class="content-div">
-					<h2>Row of buttons</h2>
-					<div id="nav-bar" class="btn-group">
-						<button id="previous-day-button" class="btn btn-default" type="button"><</button>	
-						<button id="goto-today-button" class="btn btn-default">Today</button>
-						<button id="next-day-button" class="btn btn-default">></button>
-					</div>
-					<select id="food-search" class="select2-box" style="width: 100%"> <!-- Select2 Box does not work with CSS width set -->
-					</select>
-					<h3>Eaten</h3>
-					<div id="food-list-div">
-						<ul id="food-list">
-						</ul>
-					</div>
-<!-- 					<div id="filter-bar" class="btn-group">
-						<h3>Filter buttons</h3>
-					</div> -->
+				<h2 id="day-heading" class="section-heading">January 8, 2016</h2>
+				<div id="nav-bar" class="btn-group">
+					<button id="previous-day-button" class="btn btn-default" type="button"><</button>	
+					<button id="goto-today-button" class="btn btn-default">Today</button>
+					<button id="next-day-button" class="btn btn-default">></button>
 				</div>
-				<div id="day-chart" class="content-div">
-					<h2>Day Chart</h2>
-					<div id="day-chart-graphic">
+				<div id="day-section-main" class="content-pair">
+					<div id="day-view" class="content-div">
+						<select id="food-search" class="select2-box" style="width: 100%"> <!-- Select2 Box does not work with CSS width set -->
+						</select>
+						<h3>Eaten</h3>
+						<div id="food-list-div">
+							<ul id="food-list">
+							</ul>
+						</div>
+	<!-- 					<div id="filter-bar" class="btn-group">
+							<h3>Filter buttons</h3>
+						</div> -->
+					</div>
+					<div id="day-chart" class="content-div">
+						<h2>Day Chart</h2>
+						<div id="day-chart-graphic">
+						</div>
 					</div>
 				</div>
 			</section>
 			<section id="week-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
-				<div id="week-view" class="content-div">
-					<h2>Week View</h2>
-					<div id="week-day-list">
-						<div id="sunday">
-						</div>
-						<div id="monday">
-						</div>
-						<div id="tuesday">
-						</div>
-						<div id="wednesday">
-						</div>
-						<div id="thursday">
-						</div>
-						<div id="friday">
-						</div>
-						<div id="saturday">
+				<h2 id="week-heading" class="section-heading">Week of January 2</h2>
+				<div id="week-section-main" class="content-pair">
+					<div id="week-view" class="content-div">
+						<div id="week-day-list">
+							<div id="sunday">
+							</div>
+							<div id="monday">
+							</div>
+							<div id="tuesday">
+							</div>
+							<div id="wednesday">
+							</div>
+							<div id="thursday">
+							</div>
+							<div id="friday">
+							</div>
+							<div id="saturday">
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="week-chart" class="content-div">
-					<h2>Week Chart</h2>
-					<div id="week-chart-graphic">
+					<div id="week-chart" class="content-div">
+						<h2>Week Chart</h2>
+						<div id="week-chart-graphic">
+						</div>
 					</div>
 				</div>
 			</section>
 			<section id="month-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
-				<div id="month-view" class="content-div">
-					<h2>Month View</h2>
-				</div>
-				<div id="month-chart" class="content-div">
-					<h2>Month Chart</h2>
-					<div id="month-chart-graphic">
+				<h2 id="month-heading" class="section-heading">Month of January</h2>
+				<div id="month-section-main" class="content-pair">
+					<div id="month-view" class="content-div">
+					</div>
+					<div id="month-chart" class="content-div">
+						<h2>Month Chart</h2>
+						<div id="month-chart-graphic">
+						</div>
 					</div>
 				</div>
 			</section>
@@ -156,6 +162,7 @@
 		</div>
 	</script>
 	<script src="js/lib/jquery-1.11.3.js"></script>
+	<script src="js/lib/jquery-ui.js"></script>
 	<script src="js/lib/underscore.js"></script>
 	<script src="js/lib/backbone.js"></script>
 	<script src="js/lib/backbone.localStorage.js"></script>

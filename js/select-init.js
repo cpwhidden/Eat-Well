@@ -37,7 +37,7 @@ $('#food-search').select2({
     },
     cache: true
   },
-  placeholder: 'Food lookup',
+  placeholder: 'Search for food to record',
   escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
   minimumInputLength: 1,
   templateResult: formatFood,
@@ -76,7 +76,7 @@ function formatFood (food) {
 function formatFoodSelection (food) {
   // if (!food.id) return food.text;
   // return food.fields.item_name;
-  return 'Food Lookup';
+  return 'Search for food to record';
 }
 
 function resultRangeForPage(page, rpp) {
