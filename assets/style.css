@@ -115,15 +115,76 @@ h1, h2, h3 {
 	height: 40px;
 }*/
 
+
 #day-chart-graphic, #week-chart-graphic, #month-chart-graphic {
 	min-height: 300px;
-	height: 90%;
+	height: 100%;
+	width: 100%;
 	margin: auto;
 }
 
+#week-day-list {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+}
+
+/*#day-chart-graphic {
+	vertical-align: middle;
+	margin: auto;
+}*/
+
+.chart-div {
+	display: flex;
+}
+
+.week-day-list-item {
+	height: calc(100% / 7);
+}
+
 #food-list-div {
-/*	height: calc(100% - 30px - 40px - 22px - 30px);
-*/	overflow: scroll;
+	overflow: scroll;
+}
+
+.content-pair {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.calories-text {
+	color: #D80;
+}
+
+.carb-text {
+	color: #F55;
+}
+
+.fat-text {
+	color: #55F;
+}
+
+.protein-text {
+	color: #5F5;
+}
+
+.week-day-headline, .week-day-detail {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.week-day-headline {
+	font-size: 24px;
+}
+
+.week-day-detail {
+	font-size: 16px;
+}
+
+.week-day-text {
+
+	font-weight: 500;
 }
 
 /*Responsive media queries*/

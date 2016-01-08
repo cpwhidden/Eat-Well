@@ -40,8 +40,7 @@
 							<h3>Filter buttons</h3>
 						</div> -->
 					</div>
-					<div id="day-chart" class="content-div">
-						<h2>Day Chart</h2>
+					<div id="day-chart" class="content-div chart-div">
 						<div id="day-chart-graphic">
 						</div>
 					</div>
@@ -52,24 +51,23 @@
 				<div id="week-section-main" class="content-pair">
 					<div id="week-view" class="content-div">
 						<div id="week-day-list">
-							<div id="sunday">
+							<div id="sunday" class="week-day-list-item">
 							</div>
-							<div id="monday">
+							<div id="monday" class="week-day-list-item">
 							</div>
-							<div id="tuesday">
+							<div id="tuesday" class="week-day-list-item">
 							</div>
-							<div id="wednesday">
+							<div id="wednesday" class="week-day-list-item">
 							</div>
-							<div id="thursday">
+							<div id="thursday" class="week-day-list-item">
 							</div>
-							<div id="friday">
+							<div id="friday" class="week-day-list-item">
 							</div>
-							<div id="saturday">
+							<div id="saturday" class="week-day-list-item">
 							</div>
 						</div>
 					</div>
-					<div id="week-chart" class="content-div">
-						<h2>Week Chart</h2>
+					<div id="week-chart" class="content-div chart-div">
 						<div id="week-chart-graphic">
 						</div>
 					</div>
@@ -80,8 +78,7 @@
 				<div id="month-section-main" class="content-pair">
 					<div id="month-view" class="content-div">
 					</div>
-					<div id="month-chart" class="content-div">
-						<h2>Month Chart</h2>
+					<div id="month-chart" class="content-div chart-div">
 						<div id="month-chart-graphic">
 						</div>
 					</div>
@@ -129,11 +126,14 @@
 	</script>
 	<script id="week-day-template" type="text/template">
 		<div class="week-day">
-			<div class="week-day-name">
-				<%= name %>
+			<div class="week-day-headline">
+				<span class="week-day-text"><%= name %></span>
+				<span class="calories-text"><%= calories ? calories.toFixed(0) : 0 %> calories</span>
 			</div>
-			<div class="week-day-total-calories">
-				<%= calories ? calories : 0 %> calories
+			<div class="week-day-detail">
+				<span class="carb-text"><%= carbohydrates ? carbohydrates.toFixed(1) : 0 %> carbohydrates</span>
+				<span class="fat-text"><%= fat ? fat.toFixed(1) : 0 %> fat</span>
+				<span class="protein-text"><%= protein ? protein.toFixed(1) : 0 %> protein</span>
 			</div>
 		</div>
 	</script>

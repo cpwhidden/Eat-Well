@@ -169,8 +169,13 @@ app.WeekView = Backbone.View.extend({
 		// Find aggregrate calorie info for each day
 		var weekData = dates.map(function(date){
 			return consumptionHistoryForDate(date).reduce(function(previousValue, currentValue) {
-				return {date: previousValue.date, calories : (previousValue.calories + currentValue.get("calories"))};
-			}, {date: date, calories: 0});
+				return {date: previousValue.date, 
+						calories : (previousValue.calories + currentValue.get("calories")),
+						carbohydrates : (previousValue.carbohydrates + currentValue.get('carbohydrates')),
+						fat: (previousValue.fat + currentValue.get('fat')),
+						protein: (previousValue.protein + currentValue.get('protein'))
+					};
+			}, {date: date, calories: 0, carbohydrates: 0, fat: 0, protein: 0});
 		});
 		// Append template html
 		weekData.forEach(function(dayData) {
@@ -438,7 +443,7 @@ app.ChartView = Backbone.View.extend({
 	initialize : function(elementID, filter) {
 		_.bindAll(this, 'render', 'update', 'getData', 'width', 'height', 'circleCenterX', 'circleCenterY');
 		this.el = document.getElementById(elementID);
-		this.margin = 50;
+		this.margin = 5;
 		this.recommendedCalories = 2000;
 		this.paper = Raphael(document.getElementById(elementID), this.width(), this.height());
 		this.paper.customAttributes.arc = this.pieArc;
@@ -460,7 +465,7 @@ app.ChartView = Backbone.View.extend({
 			'opacity': 0.2 + data.calories / this.recommendedCalories / 0.8,
 		});
 		this.text = this.paper.text(this.width() / 2, this.height() / 2 - 10, data.calories.toFixed(0) + '\ncalories');
-		this.text.attr({'font-family' : 'sans-serif', 'font-size' : 40, 'font-weight' : 300, 'fill' : '#fff'});
+		this.text.attr({'font-family' : 'sans-serif', 'font-size' : 40, 'font-weight' : 300, 'fill' : '#ddd'});
 		this.carbohydrates = this.paper.path().attr({
 			'stroke': '#F55',
 			'stroke-width': this.strokeWidth, 
