@@ -55,7 +55,7 @@ function formatFood (food) {
     date : app.config.get('currentDate'),
     name : food.fields.item_name,
     calories : food.fields.nf_calories,
-    totalFat : food.fields.nf_total_fat,
+    fat : food.fields.nf_total_fat,
     saturatedFat : food.fields.nf_saturated_fat,
     monounsaturatedFat : food.fields.nf_monounsaturated_fat,
     polyunsaturatedFat : food.fields.nf_polyunsaturated_fat,

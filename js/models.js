@@ -8,7 +8,7 @@ app.FoodItem = Backbone.Model.extend({
 		date : new Date(),
 		name : 'Food',
 		calories : 0,
-		totalFat : 0,
+		fat : 0,
 		saturatedFat : 0,
 		monounsaturatedFat : 0,
 		polyunsaturatedFat : 0,
@@ -27,7 +27,7 @@ app.Recipe = Backbone.Model.extend({
 	defaults : {
 		name : 'Recipe',
 		url : 'food2fork.com',
-		rank : '0'
+		rating : '0'
 	}
 })
 
