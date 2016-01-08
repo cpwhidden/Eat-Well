@@ -17,6 +17,7 @@ app.AppView = Backbone.View.extend({
 		this.recipeListView = new app.RecipeListView();
 		this.dayChartView = new app.ChartView('day-chart-graphic', filteredCollectionForDay);
 		this.weekChartView = new app.ChartView('week-chart-graphic', filteredCollectionForWeek);
+		this.monthChartView = new app.ChartView('month-chart-graphic', filteredCollectionForMonth);
 		this.render();
 	},
 
@@ -35,6 +36,7 @@ app.AppView = Backbone.View.extend({
 		this.recipeListView.render();
 		this.dayChartView.update();
 		this.weekChartView.update();
+		this.monthChartView.update();
 	}
 });
 
@@ -283,7 +285,13 @@ filteredCollectionForWeek = function(collection, date) {
 monthsMatch = function(date1, date2) {
 	return date1.getFullYear() == date2.getFullYear() 
 		&& date1.getMonth() == date2.getMonth();
-}
+};
+
+filteredCollectionForMonth = function(collection, date) {
+	return collection.models.filter(function(item) {
+		return monthsMatch(date, item.get('date'))
+	}, this);
+};
 
 // ArticleView
 app.ArticleView = Backbone.View.extend({

@@ -111,7 +111,7 @@ h1, h2, h3 {
 	height: 40px;
 }*/
 
-#day-chart-graphic, #week-chart-graphic {
+#day-chart-graphic, #week-chart-graphic, #month-chart-graphic {
 	min-height: 300px;
 	height: 90%;
 	margin: auto;
