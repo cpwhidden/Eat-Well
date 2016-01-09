@@ -151,6 +151,7 @@ app.MonthView = Backbone.View.extend({
 		_.bindAll(this, 'render');
 
 		this.$monthHeading = this.$('#month-heading');
+		this.collection.bind('change add remove', this.render);
 	},
 
 	render : function() {
@@ -167,8 +168,7 @@ app.WeekView = Backbone.View.extend({
 	initialize : function() {
 		_.bindAll(this, 'render');
 
-		this.collection.bind('change', this.render);
-		this.collection.bind('add', this.render);
+		this.collection.bind('change add remove', this.render);
 
 		this.$weekDayList = this.$('#week-day-list');
 		this.$weekHeading = this.$('#week-heading');
@@ -367,7 +367,7 @@ app.ArticleListView = Backbone.View.extend({
 		var self = this;
 		$('ul', self.$el).html('');
 		$.getJSON('http://api.nytimes.com/svc/search/v2/articlesearch.json?q=""' + 
-			'")&api-key=a40e519f6eef4efd9bdbf97fcec6af22:19:61005771&fq=news_desk:("Food" "Health")', function(data) {
+			'")&api-key=a40e519f6eef4efd9bdbf97fcec6af22:19:61005771&sort=newest&fq=news_desk:("Food" "Health")', function(data) {
 				$('#articles-attribution').html('<img src="assets/images/poweredby_nytimes_200c.png">');
 				var hits = data.response.meta.hits;
 				var articlesToTake = Math.min(hits, 5);
