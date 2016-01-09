@@ -82,9 +82,28 @@ h1, h2, h3 {
 	display: block;
 }
 
+.consumed-food-item {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+}
+
+.food-result-main-content {
+	width: 90%;
+}
+
+.remove-food-button {
+	width: 10%;
+}
+
 .banner-inner {
 	height: 100%;
 }
+
+/*.select2-search, .select2-search input, .select2-results, .select2 {
+	background-color: #ccc;
+}*/
 
 #food-list {
 	padding: 2px;
@@ -183,7 +202,6 @@ h1, h2, h3 {
 }
 
 .week-day-text {
-
 	font-weight: 500;
 }
 

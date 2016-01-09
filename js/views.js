@@ -49,15 +49,32 @@ app.FoodItemView = Backbone.View.extend({
 
 	template : _.template($('#consumed-food-template').html()),
 
+	events : {
+		'click button.remove-food-button' : 'removeItem'
+	},
+
 	initialize : function() {
-		_.bindAll(this, 'render');
+		_.bindAll(this, 'render', 'unrender', 'removeItem');
 		this.listenTo(this.model, 'change', this.render);
+		this.listenTo(this.model, 'remove', this.unrender);
+		// this.$removeButton = this.$('#remove-food-button');
+		// console.log(this.$removeButton);
+		// this.$removeButton.on('click button.remove-food-button', this.removeItem);
 	},
 
 	render : function() {
 		this.$el.toggleClass('consumed-food');
 		this.$el.html(this.template(this.model.attributes));
 		return this;
+	},
+
+	unrender : function() {
+		$(this.el).remove();
+	},
+
+	removeItem: function() {
+		console.log('removing item');
+		this.model.destroy();
 	}
 });
 
@@ -567,5 +584,12 @@ app.ChartView = Backbone.View.extend({
 
 // Connect app logic to the DOM
 $(function() {
-	new app.AppView();
+	// Silence error warnings
+	// TODO remove in future when integrating Firebase
+	Backbone.sync = function(method, model, options){
+    	options.success();
+  	}
+
+  	new app.AppView();
+
 });
