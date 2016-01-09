@@ -59,7 +59,7 @@ function formatFood (food) {
     saturatedFat : food.fields.nf_saturated_fat,
     monounsaturatedFat : food.fields.nf_monounsaturated_fat,
     polyunsaturatedFat : food.fields.nf_polyunsaturated_fat,
-    transFat : food.fields.nf_trans_fatty_acid;
+    transFat : food.fields.nf_trans_fatty_acid,
     carbohydrates : food.fields.nf_total_carbohydrate,
     dietaryFiber : food.fields.nf_dietary_fiber,
     sugar : food.fields.nf_sugars,
