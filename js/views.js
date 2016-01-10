@@ -199,6 +199,20 @@ app.MonthView = Backbone.View.extend({
 		.text(function(data) {
 			return data.date;
 		})
+		.attr('text-decoration', function(data) {
+			if (datesMatch(data.fullDate, app.config.get('currentDate'))) {
+				return 'underline';
+			} else {
+				return 'inherit';
+			}
+		})
+		.attr('font-weight', function(data) {
+			if (datesMatch(data.fullDate, app.config.get('currentDate'))) {
+				return 'bolder';
+			} else {
+				return 'normal';
+			}
+		})
 		.on('click', function(data) {
 			app.config.set({currentDate: data.fullDate});
 		});
