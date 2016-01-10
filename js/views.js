@@ -133,12 +133,8 @@ app.FoodSearchView = Backbone.View.extend({
 	},
 
 	resultSelected : function(food) {
-		console.log('selected food', food);
-		console.log('search list', this.collection);
 		var match = this.collection.where({id: food.params.data.id});
-		console.log('match', match);
 		app.ConsumptionHistory.add(this.collection.where({id: food.params.data.id}));
-		console.log('ConsumptionHistory', app.ConsumptionHistory);
 		$('#food-search').empty();
 	}
 });
@@ -237,9 +233,7 @@ app.MonthView = Backbone.View.extend({
 		var month = date.getMonth();
 		var firstDate = new Date(year, month, 1);
 		var firstDay = firstDate.getDay();
-		// for (var i = 0; i < firstDay; i++) {
-		// 	data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
-		// }
+
 		for (var i = firstDay; i < 42; i++) {
 			var newDate = new Date(year, month, i - firstDay + 1);
 			if (newDate.getMonth() == month) {
@@ -248,9 +242,6 @@ app.MonthView = Backbone.View.extend({
 				}, {calories: 0});
 				data.push({index: i, day: newDate.getDay(), week: Math.floor(i / 7), date: newDate.getDate(), calories: nutritionalData.calories, fullDate: newDate});
 			} 
-			// else if (newDate.getMonth() > month || newDate.getFullYear() > year) {
-			// 	data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
-			// }
 		}
 		return data;
 	}
@@ -691,11 +682,6 @@ app.ChartView = Backbone.View.extend({
 
 // Connect app logic to the DOM
 $(function() {
-	// Silence error warnings
-	// TODO remove in future when integrating Firebase
-	// Backbone.sync = function(method, model, options){
- //    	options.success();
- //  	}
 
   	new app.AppView();
 
