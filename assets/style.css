@@ -11,6 +11,10 @@ section, div {
 	box-sizing: border-box;
 }
 
+/*.chart-graphic svg {
+	width: 100%;
+}*/
+
 section {
 /*	height: 300px;*/
 /*	overflow: hidden;*/
@@ -106,7 +110,7 @@ text:hover, circle:hover {
 }
 
 .content-div {
-	padding: 5px 10px;
+	padding: 5px 5px;
 	overflow: scroll;
 	min-height: 400px;
 	text-align: center;
@@ -198,8 +202,10 @@ text:hover, circle:hover {
 .legend {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	max-width: 400px;
+	margin: 0 auto;
 }
 
 .legend-text {

@@ -155,6 +155,8 @@ app.MonthView = Backbone.View.extend({
 		this.collection.bind('change add remove', this.render);
 		this.calendarDaySize = 40;
 		this.margin = 30;
+		this.width = 340;
+		this.height = 340;
 	},
 
 	render : function() {
@@ -222,11 +224,11 @@ app.MonthView = Backbone.View.extend({
 	},
 
 	left : function() {
-		return ($('#month-svg').width() - this.calendarDaySize * 6) / 2;
+		return (this.width - this.calendarDaySize * 6) / 2;
 	},
 
 	top : function() {
-		return ($('#month-svg').height() - this.calendarDaySize * 4) / 2;
+		return (this.height - this.calendarDaySize * 4) / 2;
 	},
 
 	dateWeekDataForDate : function(date) {
@@ -563,11 +565,15 @@ app.ChartView = Backbone.View.extend({
 	initialize : function(elementID, filter) {
 		_.bindAll(this, 'render', 'update', 'getData', 'width', 'height', 'circleCenterX', 'circleCenterY');
 		this.el = document.getElementById(elementID);
-		this.margin = 5;
-		this.recommendedCalories = 2000;
-		this.paper = Raphael(document.getElementById(elementID), this.width(), this.height());
-		this.paper.customAttributes.arc = this.pieArc;
 		this.strokeWidth = 20;
+		this.margin = this.strokeWidth / 2 + 20;
+		this.recommendedCalories = 2000;
+		this.width = 300;
+		this.height = 300;
+		this.centerX = this.width / 2;
+		this.centerY = this.height / 2;
+		this.paper = Raphael(document.getElementById(elementID), this.width, this.height);
+		this.paper.customAttributes.arc = this.pieArc;
 		this.filter = filter;
 		this.state = 0;  // Current drawing state of the graphic, used for animation transitions
 		this.collection.bind('change add remove', this.update);
@@ -577,36 +583,33 @@ app.ChartView = Backbone.View.extend({
 	render : function() {
 		var data = this.getData();
 		var totalGrams = data.carbohydrates + data.fat + data.protein;
-		this.radius = Math.min(this.width() / 2, this.height() / 2);
-		this.circle = this.paper.circle(this.width() / 2, this.height() / 2, this.radius - this.strokeWidth / 2);
+		this.radius = Math.min(this.centerX - this.margin, this.centerY - this.margin);
+		this.circle = this.paper.circle(this.centerX, this.centerY, this.radius);
 		this.circle.attr({
 			'fill': '#D80',
 			'stroke': '',
 			'opacity': 0.2 + data.calories / this.recommendedCalories / 0.8,
 		});
-		this.text = this.paper.text(this.width() / 2, this.height() / 2 - 10, data.calories.toFixed(0) + '\ncalories');
+		this.text = this.paper.text(this.width / 2, this.height / 2 - 10, data.calories.toFixed(0) + '\ncalories');
 		this.text.attr({'font-family' : 'sans-serif', 'font-size' : 40, 'font-weight' : 300, 'fill' : '#ddd'});
 		this.carbohydrates = this.paper.path().attr({
 			'stroke': '#F55',
 			'stroke-width': this.strokeWidth, 
 			'stroke-linecap': 'round',
-			'arc' : [this.circleCenterX(), this.circleCenterY(), 0, data.carbohydrates, totalGrams, this.radius - this.strokeWidth / 2]
+			'arc' : [this.centerX, this.centerY, 0, data.carbohydrates, totalGrams, this.radius]
 		});
 		this.fat = this.paper.path().attr({
 			'stroke': '#55F',
 			'stroke-width': this.strokeWidth,
 			'stroke-linecap': 'round',
-			'arc': [this.circleCenterX(), this.circleCenterY(), data.carbohydrates, data.fat , totalGrams, this.radius - this.strokeWidth / 2]
+			'arc': [this.centerX, this.centerY, data.carbohydrates, data.fat , totalGrams, this.radius]
 		});
 		this.protein = this.paper.path().attr({
 			'stroke': '#5F5',
 			'stroke-width': this.strokeWidth,
 			'stroke-linecap': 'round',
-			'arc': [this.circleCenterX(), this.circleCenterY(), data.carbohydrates + data.fat, data.protein, totalGrams, this.radius - this.strokeWidth / 2]
+			'arc': [this.centerX, this.centerY, data.carbohydrates + data.fat, data.protein, totalGrams, this.radius]
 		});
-
-		// this.legend = this.paper.set();
-		// this.legend.push(this.paper.rect(40, this.radius * 2 + 20, 20, 30, 2).attr('fill', '#F55'));
 
 		this.toggleVisibility(data);
 	},
@@ -655,11 +658,11 @@ app.ChartView = Backbone.View.extend({
 	},
 
 	circleCenterX : function() {
-		return this.width() / 2;
+		return (this.width - this.margin) / 2;
 	},
 
 	circleCenterY: function() {
-		return this.height() / 2;
+		return (this.height - this.margin) / 2;
 	},
 
 	update : function() {
@@ -668,9 +671,9 @@ app.ChartView = Backbone.View.extend({
 		var totalGrams = data.carbohydrates + data.fat + data.protein;
 		this.text.attr('text', data.calories.toFixed(0) + '\ncalories');
 		this.circle.animate({'opacity': 0.2 + data.calories / this.recommendedCalories / 0.8}, ms, 'linear');
-		this.carbohydrates.animate({'arc': [this.circleCenterX(), this.circleCenterY(), 0, data.carbohydrates, totalGrams, this.radius - this.strokeWidth / 2]}, ms, 'elastic');
-		this.fat.animate({'arc': [this.circleCenterX(), this.circleCenterY(), data.carbohydrates, data.fat, totalGrams, this.radius - this.strokeWidth / 2]}, ms, 'elastic');
-		this.protein.animate({'arc': [this.circleCenterX(), this.circleCenterY(), data.carbohydrates + data.fat, data.protein, totalGrams, this.radius - this.strokeWidth / 2]}, ms, 'elastic');
+		this.carbohydrates.animate({'arc': [this.centerX, this.centerY, 0, data.carbohydrates, totalGrams, this.radius]}, ms, 'elastic');
+		this.fat.animate({'arc': [this.centerX, this.centerY, data.carbohydrates, data.fat, totalGrams, this.radius]}, ms, 'elastic');
+		this.protein.animate({'arc': [this.centerX, this.centerY, data.carbohydrates + data.fat, data.protein, totalGrams, this.radius]}, ms, 'elastic');
 		this.toggleVisibility(data);
 	},
 
