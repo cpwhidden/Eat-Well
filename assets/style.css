@@ -57,7 +57,7 @@ h2 {
 	margin: 20px;
 }
 
-text:hover, circle:hover {
+.month-svg text:hover, .month-svg circle:hover {
 	cursor: pointer;
 }
 
