@@ -195,7 +195,7 @@ h2 {
 	text-align: center;
 }
 
-.week-day:hover {
+.week-day-list-item:hover {
 	cursor: pointer;
 }
 
