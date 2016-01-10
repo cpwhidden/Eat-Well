@@ -541,7 +541,7 @@ app.ChartView = Backbone.View.extend({
 		var data = this.getData();
 		var totalGrams = data.carbohydrates + data.fat + data.protein;
 		this.radius = Math.min(this.width() / 2, this.height() / 2);
-		this.circle = this.paper.circle(this.width() / 2, this.height() / 2, this.radius);
+		this.circle = this.paper.circle(this.width() / 2, this.height() / 2, this.radius - this.strokeWidth / 2);
 		this.circle.attr({
 			'fill': '#D80',
 			'stroke': '',
