@@ -11,6 +11,12 @@ app.AppView = Backbone.View.extend({
 
 		this.listenTo(app.config, 'change:currentDate', this.dateChanged);
 		app.ConsumptionHistory.fetch();
+		this.$previousDay = this.$('#previous-day-button');
+		this.$today = this.$('#goto-today-button');
+		this.$nextDay = this.$('#next-day-button');
+		this.$previousDay.on('click', this.gotoPreviousDay);
+		this.$today.on('click', this.gotoToday);
+		this.$nextDay.on('click', this.nextDay);
 		this.dayView = new app.DayView();
 		this.weekView = new app.WeekView();
 		this.monthView = new app.MonthView();
@@ -36,6 +42,21 @@ app.AppView = Backbone.View.extend({
 		this.dayChartView.update();
 		this.weekChartView.update();
 		this.monthChartView.update();
+	},
+
+	gotoPreviousDay : function() {
+		var newDate = new Date(app.config.get('currentDate').getTime() - 86400000);
+		app.config.set({currentDate: newDate});
+	},
+
+	gotoToday : function() {
+		var newDate = new Date();
+		app.config.set({currentDate: newDate});
+	},
+
+	nextDay : function() {
+		var newDate = new Date(app.config.get('currentDate').getTime() + 86400000);
+		app.config.set({currentDate: newDate});
 	}
 });
 
@@ -345,13 +366,7 @@ app.DayView = Backbone.View.extend({
 		_.bindAll(this, 'render');
 		this.$foodList = this.$('#food-list');
 		this.$dayHeading = this.$('#day-heading');
-		this.$previousDay = this.$('#previous-day-button');
-		this.$today = this.$('#goto-today-button');
-		this.$nextDay = this.$('#next-day-button');
 
-		this.$previousDay.on('click', this.gotoPreviousDay);
-		this.$today.on('click', this.gotoToday);
-		this.$nextDay.on('click', this.nextDay);
 		this.foodItemList = new app.FoodItemList();
 		this.foodSearchView = new app.FoodSearchView();
 		this.render();
@@ -361,21 +376,6 @@ app.DayView = Backbone.View.extend({
 		this.$dayHeading.text($.datepicker.formatDate('MM d, yy', app.config.get('currentDate')));
 		this.foodItemList.render();
 		return this;
-	},
-
-	gotoPreviousDay : function() {
-		var newDate = new Date(app.config.get("currentDate").getTime() - 86400000);
-		app.config.set({currentDate: newDate});
-	},
-
-	gotoToday : function() {
-		var newDate = new Date();
-		app.config.set({currentDate: newDate});
-	},
-
-	nextDay : function() {
-		var newDate = new Date(app.config.get("currentDate").getTime() + 86400000);
-		app.config.set({currentDate: newDate});
 	}
 });
 
