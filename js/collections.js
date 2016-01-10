@@ -3,10 +3,11 @@
 var app = app || {};
 
 // ConsumptionHistory
-app.ConsumptionHistoryCollection = Backbone.Collection.extend({
+app.ConsumptionHistoryCollection = Backbone.Firebase.Collection.extend({
 	model : app.FoodItem,
-	localStorage: new Backbone.LocalStorage("ConsumptionHistory"),
-	comparator : 'date'
+	url : 'https://blazing-inferno-5166.firebaseio.com/ConsumptionHistory',
+	comparator : 'date',
+	autoSync: true
 })
 
 app.ConsumptionHistory = new app.ConsumptionHistoryCollection();

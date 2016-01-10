@@ -658,9 +658,9 @@ app.ChartView = Backbone.View.extend({
 $(function() {
 	// Silence error warnings
 	// TODO remove in future when integrating Firebase
-	Backbone.sync = function(method, model, options){
-    	options.success();
-  	}
+	// Backbone.sync = function(method, model, options){
+ //    	options.success();
+ //  	}
 
   	new app.AppView();
 
