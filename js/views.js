@@ -199,7 +199,7 @@ app.MonthView = Backbone.View.extend({
 	},
 
 	top : function() {
-		return ($('#month-svg').height() - this.calendarDaySize * 5) / 2;
+		return ($('#month-svg').height() - this.calendarDaySize * 4) / 2;
 	},
 
 	dateWeekDataForDate : function(date) {
@@ -450,7 +450,9 @@ app.ArticleListView = Backbone.View.extend({
 					var articleView = new app.ArticleView({model: articleModel});
 					$('ul', self.$el).append(articleView.render().el);
 				}
-		})
+		}).fail(function(xhr, status, error) {
+			$('ul', self.$el).append('Unable to retrieve food articles');
+		});
 	}
 })
 
@@ -515,6 +517,9 @@ app.RecipeListView = Backbone.View.extend({
 					$('ul', self.$el).append(recipeView.render().el);
 				}
 			},
+			error: function(xhr, status, error) {
+				$('ul', self.$el).append('Unable to retrieve food articles');
+			}
 		});
 	}
 });

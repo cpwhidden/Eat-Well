@@ -35,6 +35,9 @@ $('#food-search').select2({
         }
       };
     },
+    error : function(xhr, status, error) {
+      alert('There was an error trying search for food items.')
+    },
     cache: true
   },
   placeholder: 'Search for food to record',
