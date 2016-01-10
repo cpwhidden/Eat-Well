@@ -190,6 +190,7 @@ app.MonthView = Backbone.View.extend({
 		.text(function(data) {
 			return data.date;
 		});
+		textSelection.exit().remove();
 		this.$monthHeading.html('Month of ' + $.datepicker.formatDate('MM', app.config.get('currentDate')));
 		return this;
 	},
@@ -208,19 +209,20 @@ app.MonthView = Backbone.View.extend({
 		var month = date.getMonth();
 		var firstDate = new Date(year, month, 1);
 		var firstDay = firstDate.getDay();
-		for (var i = 0; i < firstDay; i++) {
-			data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
-		}
-		for (var i = firstDay; i < 35; i++) {
+		// for (var i = 0; i < firstDay; i++) {
+		// 	data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
+		// }
+		for (var i = firstDay; i < 42; i++) {
 			var newDate = new Date(year, month, i - firstDay + 1);
 			if (newDate.getMonth() == month) {
 				var nutritionalData = filteredCollectionForDay(this.collection, newDate).reduce(function(previousValue, currentValue) {
 					return {calories: previousValue.calories + currentValue.get('calories')}
 				}, {calories: 0});
 				data.push({index: i, day: newDate.getDay(), week: Math.floor(i / 7), date: newDate.getDate(), calories: nutritionalData.calories});
-			} else if (newDate.getMonth() > month || newDate.getFullYear() > year) {
-				data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
-			}
+			} 
+			// else if (newDate.getMonth() > month || newDate.getFullYear() > year) {
+			// 	data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
+			// }
 		}
 		return data;
 	}
