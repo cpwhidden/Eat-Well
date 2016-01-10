@@ -35,7 +35,7 @@ $('#food-search').select2({
         }
       };
     },
-    error: function(jqXHR, textStatus, errorThrown){
+    error: function(xhr, status, error){
      $('#select2-food-search-results').prepend('<span id="food-search-err-msg" style="color: red; padding-left: 5px">Error retrieving food search results</span>');
     },
     success: function() {
