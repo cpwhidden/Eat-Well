@@ -170,6 +170,14 @@ h2 {
 	max-height: 300px;
 }
 
+.select2-selection {
+	background-color: #ccc !important;
+}
+
+.select2-selection__placeholder {
+	color: #000 !important;
+}
+
 #food-list {
 	padding: 2px;
 	margin: 0;

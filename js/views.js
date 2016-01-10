@@ -172,7 +172,7 @@ app.MonthView = Backbone.View.extend({
 		this.collection.bind('change add remove', this.render);
 		this.calendarDaySize = 40;
 		this.margin = 30;
-		this.width = 340;
+		this.width = $('#month-view').width();
 		this.height = 340;
 	},
 
