@@ -14,8 +14,8 @@ app.AppView = Backbone.View.extend({
 		this.dayView = new app.DayView();
 		this.weekView = new app.WeekView();
 		this.monthView = new app.MonthView();
-		this.articleListView = new app.ArticleListView();
-		this.recipeListView = new app.RecipeListView();
+		this.articleListView = new app.ArticleListView().render();
+		this.recipeListView = new app.RecipeListView().render();
 		this.dayChartView = new app.ChartView('day-chart-graphic', filteredCollectionForDay);
 		this.weekChartView = new app.ChartView('week-chart-graphic', filteredCollectionForWeek);
 		this.monthChartView = new app.ChartView('month-chart-graphic', filteredCollectionForMonth);
@@ -33,8 +33,6 @@ app.AppView = Backbone.View.extend({
 		this.dayView.render();
 		this.weekView.render();
 		this.monthView.render();
-		this.articleListView.render();
-		this.recipeListView.render();
 		this.dayChartView.update();
 		this.weekChartView.update();
 		this.monthChartView.update();
@@ -157,9 +155,9 @@ app.MonthView = Backbone.View.extend({
 	render : function() {
 		var self = this;
 		var monthData = this.dateWeekDataForDate(app.config.get('currentDate'));
-		var rectSelection = d3.select('#month-svg').selectAll('circle').data(monthData)
-		rectSelection.enter().append('circle');
-		rectSelection.data(monthData).attr('cx', function(data) {
+		var circleSelection = d3.select('#month-svg').selectAll('circle').data(monthData)
+		circleSelection.enter().append('circle');
+		circleSelection.data(monthData).attr('cx', function(data) {
 				return self.left() + data.day * self.calendarDaySize;
 			})
 			.attr('cy', function(data) {
@@ -173,7 +171,7 @@ app.MonthView = Backbone.View.extend({
 			.attr('index', function(data) {
 				return data.index;
 			});
-		rectSelection.exit().remove();
+		circleSelection.exit().remove();
 
 		var textSelection = d3.select('#month-svg').selectAll('text').data(monthData);
 		textSelection.enter().append('text');
@@ -188,6 +186,7 @@ app.MonthView = Backbone.View.extend({
 		.attr('fill', '#ccc')
 		.attr('text-anchor', 'middle')
 		.attr('dominant-baseline', 'middle')
+		.attr('font-size', '24px')
 		.text(function(data) {
 			return data.date;
 		});
@@ -529,7 +528,7 @@ app.ChartView = Backbone.View.extend({
 		this.el = document.getElementById(elementID);
 		this.margin = 5;
 		this.recommendedCalories = 2000;
-		this.paper = Raphael(document.getElementById(elementID), 400, 400);
+		this.paper = Raphael(document.getElementById(elementID), this.width(), this.height());
 		this.paper.customAttributes.arc = this.pieArc;
 		this.strokeWidth = 20;
 		this.filter = filter;
