@@ -299,6 +299,11 @@ h2 {
 	margin-bottom: 15px;
 }
 
+#attribution {
+	margin-top: 20px;
+	text-align: center;
+}
+
 ul {
 	padding: 0 5px;
 }
