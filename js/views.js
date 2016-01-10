@@ -308,6 +308,7 @@ app.WeekView = Backbone.View.extend({
 					dayData.name = "Saturday";
 					break;
 			}
+			tag.off();
 			tag.on('click', function() {
 				app.config.set({currentDate: dayData.date});
 			});
@@ -652,7 +653,7 @@ app.ChartView = Backbone.View.extend({
 		var data = this.getData();
 		var totalGrams = data.carbohydrates + data.fat + data.protein;
 		this.text.attr('text', data.calories.toFixed(0) + '\ncalories');
-		this.circle.animate({'opacity': 0.2 + data.calories / this.recommendedCalories / 0.8}, ms, 'elastic');
+		this.circle.animate({'opacity': 0.2 + data.calories / this.recommendedCalories / 0.8}, ms, 'linear');
 		this.carbohydrates.animate({'arc': [this.circleCenterX(), this.circleCenterY(), 0, data.carbohydrates, totalGrams, this.radius - this.strokeWidth / 2]}, ms, 'elastic');
 		this.fat.animate({'arc': [this.circleCenterX(), this.circleCenterY(), data.carbohydrates, data.fat, totalGrams, this.radius - this.strokeWidth / 2]}, ms, 'elastic');
 		this.protein.animate({'arc': [this.circleCenterX(), this.circleCenterY(), data.carbohydrates + data.fat, data.protein, totalGrams, this.radius - this.strokeWidth / 2]}, ms, 'elastic');

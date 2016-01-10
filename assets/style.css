@@ -198,6 +198,7 @@ text:hover, circle:hover {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	max-width: 400px;
 }
 
 .legend-text {
@@ -266,6 +267,14 @@ text:hover, circle:hover {
 #month-svg {
 	width: 100%;
 	height: 400px;
+}
+
+.article {
+	margin-bottom: 5px;
+}
+
+.recipe {
+	margin-bottom: 15px;
 }
 
 li {
