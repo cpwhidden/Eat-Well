@@ -99,7 +99,7 @@ app.FoodItemList = Backbone.View.extend({
 	},
 
 	testToAppend : function(item) {
-		if (datesMatch(app.config.get('currentDate'), item.get('date'))) {
+		if (datesMatch(app.config.get('currentDate'), new Date(item.get('dateTime')))) {
 			this.appendItem(item);
 		}
 	}
@@ -133,7 +133,12 @@ app.FoodSearchView = Backbone.View.extend({
 	},
 
 	resultSelected : function(food) {
+		console.log('selected food', food);
+		console.log('search list', this.collection);
+		var match = this.collection.where({id: food.params.data.id});
+		console.log('match', match);
 		app.ConsumptionHistory.add(this.collection.where({id: food.params.data.id}));
+		console.log('ConsumptionHistory', app.ConsumptionHistory);
 		$('#food-search').empty();
 	}
 });
@@ -158,23 +163,23 @@ app.MonthView = Backbone.View.extend({
 		var circleSelection = d3.select('#month-svg').selectAll('circle').data(monthData)
 		circleSelection.enter().append('circle');
 		circleSelection.data(monthData).attr('cx', function(data) {
-				return self.left() + data.day * self.calendarDaySize;
-			})
-			.attr('cy', function(data) {
-				return self.top() + data.week * self.calendarDaySize;
-			})
-			.attr('r', self.calendarDaySize / 2)
-			.attr('fill', '#D80')
-			.attr('opacity', function(data) {
-				return data.calories / 2000;	
-			})
-			.attr('index', function(data) {
-				return data.index;
-			})
-			.attr('unselectable', 'on')
-			.on('click', function(data) {
-				app.config.set({currentDate: data.fullDate});
-			});
+			return self.left() + data.day * self.calendarDaySize;
+		})
+		.attr('cy', function(data) {
+			return self.top() + data.week * self.calendarDaySize;
+		})
+		.attr('r', self.calendarDaySize / 2)
+		.attr('fill', '#D80')
+		.attr('opacity', function(data) {
+			return data.calories / 2000;	
+		})
+		.attr('index', function(data) {
+			return data.index;
+		})
+		.attr('unselectable', 'on')
+		.on('click', function(data) {
+			app.config.set({currentDate: data.fullDate});
+		});
 		circleSelection.exit().remove();
 
 		var textSelection = d3.select('#month-svg').selectAll('text').data(monthData);
@@ -374,14 +379,14 @@ datesMatch = function(date1, date2) {
 
 consumptionHistoryForDate = function(date) {
 	var filtered = app.ConsumptionHistory.filter(function(model) {
-		return datesMatch(model.get('date'), date);
+		return datesMatch(new Date(model.get('dateTime')), date);
 	});
 	return filtered;
 };
 
 filteredCollectionForDay = function(collection, date) {
 	return collection.models.filter(function(item) {
-		return datesMatch(date, item.get('date'));
+		return datesMatch(date, new Date(item.get('dateTime')));
 	}, this);
 };
 
@@ -393,7 +398,7 @@ weeksMatch = function(date1, date2) {
 
 filteredCollectionForWeek = function(collection, date) {
 	return collection.models.filter(function(item) {
-		return weeksMatch(date, item.get('date'));
+		return weeksMatch(date, new Date(item.get('dateTime')));
 	}, this);
 };
 
@@ -404,7 +409,7 @@ monthsMatch = function(date1, date2) {
 
 filteredCollectionForMonth = function(collection, date) {
 	return collection.models.filter(function(item) {
-		return monthsMatch(date, item.get('date'))
+		return monthsMatch(date, new Date(item.get('dateTime')));
 	}, this);
 };
 

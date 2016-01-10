@@ -55,7 +55,7 @@ function formatFood (food) {
 
   var foodItem = new app.FoodItem({
     id : food.id,
-    date : app.config.get('currentDate'),
+    dateTime : app.config.get('currentDate').getTime(),
     name : food.fields.item_name,
     calories : food.fields.nf_calories,
     fat : food.fields.nf_total_fat,
@@ -70,7 +70,7 @@ function formatFood (food) {
     quantity : food.fields.nf_serving_size_qty,
     unit : food.fields.nf_serving_size_unit,
   });
-  // console.log(foodItem);
+  console.log(foodItem);
   app.FoodSearchList.add(foodItem);
   var markup = new app.ResultFoodView({model: foodItem}).render().el;
 
