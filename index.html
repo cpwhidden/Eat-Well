@@ -23,16 +23,16 @@
 				<h3>You are what you eat! <br> Record what you eat below and see the overall composition of what you're eating.</h3>
 			</div>
 		</section>
+		<div id="nav-bar" class="btn-group">
+			<button id="previous-day-button" class="btn btn-default" type="button"><</button>	
+			<button id="goto-today-button" class="btn btn-default">Today</button>
+			<button id="next-day-button" class="btn btn-default">></button>
+		</div>
 		<section id="food-consumption" class="prominent-section">
 			<section id="day-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
 				<h2 id="day-heading" class="section-heading"></h2>
 				<div id="day-section-main" class="content-pair">
 					<div id="day-view" class="content-div">
-						<div id="nav-bar" class="btn-group">
-							<button id="previous-day-button" class="btn btn-default" type="button"><</button>	
-							<button id="goto-today-button" class="btn btn-default">Today</button>
-							<button id="next-day-button" class="btn btn-default">></button>
-						</div>
 						<select id="food-search" class="select2-box" style="width: 100%"> <!-- Select2 Box does not work with CSS width set -->
 						</select>
 						<h3>Consumed Foods</h3>
@@ -157,7 +157,7 @@
 					<%= name %>
 				</div>
 				<div class="food-result-detail">
-					<%= quantity + ' ' + unit %>
+					<u><%= quantity + ' ' + unit %></u> = <span class="calories-text"><%= calories + ' calories'%> - <span class="carb-text"><%= carbohydrates ? carbohydrates.toFixed(1) : 0 %> carbohydrates</span> - <span class="fat-text"><%= fat ? fat.toFixed(1) : 0 %> fat</span> - <span class="protein-text"><%= protein ? protein.toFixed(1) : 0 %> protein</span>
 				</div>
 			</div>
 			<button class="btn btn-default remove-food-button">×</button>
@@ -170,7 +170,7 @@
 					<%= name %>
 				</div>
 				<div class="food-result-detail">
-					<%= quantity + ' ' + unit %>
+					<u><%= quantity + ' ' + unit %></u> = <span class="calories-text"><%= calories + ' calories'%> - <span class="carb-text"><%= carbohydrates ? carbohydrates.toFixed(1) : 0 %> carbohydrates</span> - <span class="fat-text"><%= fat ? fat.toFixed(1) : 0 %> fat</span> - <span class="protein-text"><%= protein ? protein.toFixed(1) : 0 %> protein</span>
 				</div>
 			</div>
 		</div>

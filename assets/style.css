@@ -5,6 +5,9 @@ body {
 
 section, div {
 	background-color: #111130;
+/*	outline-width: 3px;
+	outline-color: white;
+	outline-style: solid;*/
 	box-sizing: border-box;
 }
 
@@ -43,7 +46,7 @@ h1, h2, h3 {
 }
 
 h2 {
-	margin: 20px;
+	margin: 0 auto 10px auto;
 }
 
 .month-svg text:hover, .month-svg circle:hover {
@@ -61,6 +64,10 @@ h2 {
 .row > div {
 	height: 100%;
 	max-height: 100%;
+}
+
+#nav-bar {
+	margin-top: 30px;
 }
 
 .banner {
@@ -106,7 +113,7 @@ h2 {
 	display: flex;
 	flex-direction: column;
 	flex-wrap: nowrap;
-	margin-bottom: 1px;
+	margin-bottom: 10px;
 	box-shadow: 0 1px 0 0 #ccc;
 }
 
@@ -127,7 +134,7 @@ h2 {
 	display: block;
 }
 
-.food-result-main-content {
+.consumed-food-list-item > .consumed-food-item > .food-result-main-content {
 	margin: 1px;
 	box-shadow: 0 0.5px 0 0 #ccc;
 }
@@ -160,6 +167,10 @@ h2 {
 .select2-search, .select2-search input, .select2-results, .select2 {
 	background-color: #225;
 	color: #ccc;
+}
+
+#select2-food-search-results {
+	max-height: 300px;
 }
 
 #food-list {
