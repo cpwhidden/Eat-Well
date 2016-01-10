@@ -57,9 +57,6 @@ app.FoodItemView = Backbone.View.extend({
 		_.bindAll(this, 'render', 'unrender', 'removeItem');
 		this.listenTo(this.model, 'change', this.render);
 		this.listenTo(this.model, 'remove', this.unrender);
-		// this.$removeButton = this.$('#remove-food-button');
-		// console.log(this.$removeButton);
-		// this.$removeButton.on('click button.remove-food-button', this.removeItem);
 	},
 
 	render : function() {
@@ -73,7 +70,6 @@ app.FoodItemView = Backbone.View.extend({
 	},
 
 	removeItem: function() {
-		console.log('removing item');
 		this.model.destroy();
 	}
 });
@@ -140,23 +136,94 @@ app.FoodSearchView = Backbone.View.extend({
 
 	resultSelected : function(food) {
 		app.ConsumptionHistory.add(this.collection.where({id: food.params.data.id}));
+		$('#food-search').empty();
 	}
 });
 
 // Month View
 app.MonthView = Backbone.View.extend({
 	el: '#month-section',
+	collection : app.ConsumptionHistory,
 
 	initialize : function() {
-		_.bindAll(this, 'render');
+		_.bindAll(this, 'render', 'dateWeekDataForDate', 'left', 'top');
 
 		this.$monthHeading = this.$('#month-heading');
 		this.collection.bind('change add remove', this.render);
+		this.calendarDaySize = 40;
+		this.margin = 30;
 	},
 
 	render : function() {
+		var self = this;
+		var monthData = this.dateWeekDataForDate(app.config.get('currentDate'));
+		var rectSelection = d3.select('#month-svg').selectAll('circle').data(monthData)
+		rectSelection.enter().append('circle');
+		rectSelection.data(monthData).attr('cx', function(data) {
+				return self.left() + data.day * self.calendarDaySize;
+			})
+			.attr('cy', function(data) {
+				return self.top() + data.week * self.calendarDaySize;
+			})
+			.attr('r', self.calendarDaySize / 2)
+			.attr('fill', '#D80')
+			.attr('opacity', function(data) {
+				return data.calories / 2000;	
+			})
+			.attr('index', function(data) {
+				return data.index;
+			});
+		rectSelection.exit().remove();
+
+		var textSelection = d3.select('#month-svg').selectAll('text').data(monthData);
+		textSelection.enter().append('text');
+		textSelection.data(monthData).attr('x', function(data){
+			return self.left() + data.day * self.calendarDaySize;
+		})
+		.attr('y', function(data) {
+			return self.top() + data.week * self.calendarDaySize;
+		})
+		.attr('width', self.calendarDaySize)
+		.attr('height', self.calendarDaySize)
+		.attr('fill', '#ccc')
+		.attr('text-anchor', 'middle')
+		.attr('dominant-baseline', 'middle')
+		.text(function(data) {
+			return data.date;
+		});
 		this.$monthHeading.html('Month of ' + $.datepicker.formatDate('MM', app.config.get('currentDate')));
 		return this;
+	},
+
+	left : function() {
+		return ($('#month-svg').width() - this.calendarDaySize * 6) / 2;
+	},
+
+	top : function() {
+		return ($('#month-svg').height() - this.calendarDaySize * 5) / 2;
+	},
+
+	dateWeekDataForDate : function(date) {
+		var data = [];
+		var year = date.getFullYear();
+		var month = date.getMonth();
+		var firstDate = new Date(year, month, 1);
+		var firstDay = firstDate.getDay();
+		for (var i = 0; i < firstDay; i++) {
+			data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
+		}
+		for (var i = firstDay; i < 35; i++) {
+			var newDate = new Date(year, month, i - firstDay + 1);
+			if (newDate.getMonth() == month) {
+				var nutritionalData = filteredCollectionForDay(this.collection, newDate).reduce(function(previousValue, currentValue) {
+					return {calories: previousValue.calories + currentValue.get('calories')}
+				}, {calories: 0});
+				data.push({index: i, day: newDate.getDay(), week: Math.floor(i / 7), date: newDate.getDate(), calories: nutritionalData.calories});
+			} else if (newDate.getMonth() > month || newDate.getFullYear() > year) {
+				data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
+			}
+		}
+		return data;
 	}
 });
 
@@ -296,7 +363,7 @@ datesMatch = function(date1, date2) {
 
 consumptionHistoryForDate = function(date) {
 	var filtered = app.ConsumptionHistory.filter(function(model) {
-		return datesMatch(model.get("date"), date);
+		return datesMatch(model.get('date'), date);
 	});
 	return filtered;
 };
@@ -462,7 +529,7 @@ app.ChartView = Backbone.View.extend({
 		this.el = document.getElementById(elementID);
 		this.margin = 5;
 		this.recommendedCalories = 2000;
-		this.paper = Raphael(document.getElementById(elementID), this.width(), this.height());
+		this.paper = Raphael(document.getElementById(elementID), 400, 400);
 		this.paper.customAttributes.arc = this.pieArc;
 		this.strokeWidth = 20;
 		this.filter = filter;
@@ -502,8 +569,9 @@ app.ChartView = Backbone.View.extend({
 			'arc': [this.circleCenterX(), this.circleCenterY(), data.carbohydrates + data.fat, data.protein, totalGrams, this.radius - this.strokeWidth / 2]
 		});
 
-		// this.carbohydrates = this.paper.path('M' + (this.width() / 2) + ', ' + (((this.height() - (this.radius * 2)) / 2) + (this.strokeWidth / 2) ) + ' A' + (this.radius - this.strokeWidth / 2) + ',' + (this.radius - this.strokeWidth / 2) + ' 0 0,0 ' + (this.strokeWidth / 2) + ',' + (this.height() / 2));
-		// this.carbohydrates.attr({'stroke': '#F55', 'stroke-width': this.strokeWidth, 'stroke-linecap': 'round'});
+		// this.legend = this.paper.set();
+		// this.legend.push(this.paper.rect(40, this.radius * 2 + 20, 20, 30, 2).attr('fill', '#F55'));
+
 		this.toggleVisibility(data);
 	},
 

@@ -41,7 +41,22 @@
 						</div> -->
 					</div>
 					<div id="day-chart" class="content-div chart-div">
+						<h2>Day Chart</h2>
 						<div id="day-chart-graphic">
+						</div>
+						<div id="day-chart-legend" class="legend">
+							<div class="legend-carbohydrates legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"><rect></svg>
+								<span class="carb-text legend-text">Carbohydrates</span>
+							</div>
+							<div class="legend-fat legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"><rect></svg>
+								<span class="fat-text legend-text">Fat</span>
+							</div>
+							<div class="legend-protein legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"><rect></svg>
+								<span class="protein-text legend-text">Protein</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -68,7 +83,22 @@
 						</div>
 					</div>
 					<div id="week-chart" class="content-div chart-div">
+						<h2>Week Chart</h2>
 						<div id="week-chart-graphic">
+						</div>
+						<div id="day-chart-legend" class="legend">
+							<div class="legend-carbohydrates legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"><rect></svg>
+								<span class="carb-text legend-text">Carbohydrates</span>
+							</div>
+							<div class="legend-fat legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"><rect></svg>
+								<span class="fat-text legend-text">Fat</span>
+							</div>
+							<div class="legend-protein legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"><rect></svg>
+								<span class="protein-text legend-text">Protein</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -77,9 +107,60 @@
 				<h2 id="month-heading" class="section-heading">Month of January</h2>
 				<div id="month-section-main" class="content-pair">
 					<div id="month-view" class="content-div">
+						<svg id="month-svg" class="month-svg"></svg>
+<!-- 						<div id="calendar-index-1" class="calendar-day"></div>
+						<div id="calendar-index-2" class="calendar-day"></div>
+						<div id="calendar-index-3" class="calendar-day"></div>
+						<div id="calendar-index-4" class="calendar-day"></div>
+						<div id="calendar-index-5" class="calendar-day"></div>
+						<div id="calendar-index-6" class="calendar-day"></div>
+						<div id="calendar-index-7" class="calendar-day"></div>
+						<div id="calendar-index-8" class="calendar-day"></div>
+						<div id="calendar-index-9" class="calendar-day"></div>
+						<div id="calendar-index-10" class="calendar-day"></div>
+						<div id="calendar-index-11" class="calendar-day"></div>
+						<div id="calendar-index-12" class="calendar-day"></div>
+						<div id="calendar-index-13" class="calendar-day"></div>
+						<div id="calendar-index-14" class="calendar-day"></div>
+						<div id="calendar-index-15" class="calendar-day"></div>
+						<div id="calendar-index-16" class="calendar-day"></div>
+						<div id="calendar-index-17" class="calendar-day"></div>
+						<div id="calendar-index-18" class="calendar-day"></div>
+						<div id="calendar-index-19" class="calendar-day"></div>
+						<div id="calendar-index-20" class="calendar-day"></div>
+						<div id="calendar-index-21" class="calendar-day"></div>
+						<div id="calendar-index-22" class="calendar-day"></div>
+						<div id="calendar-index-23" class="calendar-day"></div>
+						<div id="calendar-index-24" class="calendar-day"></div>
+						<div id="calendar-index-25" class="calendar-day"></div>
+						<div id="calendar-index-26" class="calendar-day"></div>
+						<div id="calendar-index-27" class="calendar-day"></div>
+						<div id="calendar-index-28" class="calendar-day"></div>
+						<div id="calendar-index-29" class="calendar-day"></div>
+						<div id="calendar-index-30" class="calendar-day"></div>
+						<div id="calendar-index-31" class="calendar-day"></div>
+						<div id="calendar-index-32" class="calendar-day"></div>
+						<div id="calendar-index-33" class="calendar-day"></div>
+						<div id="calendar-index-34" class="calendar-day"></div>
+						<div id="calendar-index-35" class="calendar-day"></div> -->
 					</div>
 					<div id="month-chart" class="content-div chart-div">
+						<h2>Month Chart</h2>
 						<div id="month-chart-graphic">
+						</div>
+						<div id="day-chart-legend" class="legend">
+							<div class="legend-carbohydrates legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"><rect></svg>
+								<span class="carb-text legend-text">Carbohydrates</span>
+							</div>
+							<div class="legend-fat legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"><rect></svg>
+								<span class="fat-text legend-text">Fat</span>
+							</div>
+							<div class="legend-protein legend-section">
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"><rect></svg>
+								<span class="protein-text legend-text">Protein</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -93,7 +174,7 @@
 				</div>
 			</div>
 			<div id="recipe-list" class="col-xs-12 col-sm-6 content-div">
-				<h2>Recipes</h2>
+				<h2>Popular Recipes</h2>
 				<ul></ul>
 				<div id="recipes-attribution">
 				</div>
@@ -174,6 +255,7 @@
 	<script src="js/lib/select2.js"></script>
 	<script src="js/select-init.js"></script>
 	<script src="js/lib/raphael.js"></script>
+	<script src="js/lib/d3.js"></script>
 </body>
 
 

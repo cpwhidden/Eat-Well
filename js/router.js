@@ -7,7 +7,7 @@ app.DayFilterRouter = Backbone.Router.extend({
 	routes: {':year/:month/:day' : "setDate"},
 
 	setDate : function(year, month, day) {
-		app.config.set({currentDate: new Date(year, month - 1, day - 1)});
+		app.config.set({currentDate: new Date(year, month - 1, day)});
 	}
 })
 

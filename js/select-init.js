@@ -67,7 +67,7 @@ function formatFood (food) {
     quantity : food.fields.nf_serving_size_qty,
     unit : food.fields.nf_serving_size_unit,
   });
-  console.log(foodItem);
+  // console.log(foodItem);
   app.FoodSearchList.add(foodItem);
   var markup = new app.ResultFoodView({model: foodItem}).render().el;
 
