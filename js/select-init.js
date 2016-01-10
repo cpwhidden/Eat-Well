@@ -35,8 +35,11 @@ $('#food-search').select2({
         }
       };
     },
-    error : function(xhr, status, error) {
-      alert('There was an error trying search for food items.')
+    error: function(jqXHR, textStatus, errorThrown){
+     $('#select2-food-search-results').prepend('<span id="food-search-err-msg" style="color: red; padding-left: 5px">Error retrieving food search results</span>');
+    },
+    success: function() {
+      $('#food-search-err-msg').remove();
     },
     cache: true
   },
@@ -82,6 +85,10 @@ function formatFoodSelection (food) {
   // return food.fields.item_name;
   return 'Search for food to record';
 }
+
+function formatAjaxError(xhr, status, error) {
+  return 'There was an error searching for food items';
+} 
 
 function resultRangeForPage(page, rpp) {
   return page * rpp + ':' + (page * rpp + rpp);
