@@ -16,6 +16,22 @@ section {
 /*	overflow: hidden;*/
 }
 
+a:link {
+	color: #D80;
+}
+
+a:hover {
+	color: #FA2;
+}
+
+a:visited {
+	color: #A60;
+}
+
+a:active {
+	color: #FC7;
+}
+
 h1 {
 	font-size: 48px;
 }
@@ -32,6 +48,10 @@ h1, h2, h3 {
 
 h2 {
 	margin: 20px;
+}
+
+text:hover, circle:hover {
+	cursor: pointer;
 }
 
 .btn {
@@ -144,6 +164,10 @@ h2 {
 
 .section-heading {
 	text-align: center;
+}
+
+.week-day:hover {
+	cursor: pointer;
 }
 
 /*#filter-bar {

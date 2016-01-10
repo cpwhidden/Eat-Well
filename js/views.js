@@ -170,6 +170,10 @@ app.MonthView = Backbone.View.extend({
 			})
 			.attr('index', function(data) {
 				return data.index;
+			})
+			.attr('unselectable', 'on')
+			.on('click', function(data) {
+				app.config.set({currentDate: data.fullDate});
 			});
 		circleSelection.exit().remove();
 
@@ -189,6 +193,9 @@ app.MonthView = Backbone.View.extend({
 		.attr('font-size', '24px')
 		.text(function(data) {
 			return data.date;
+		})
+		.on('click', function(data) {
+			app.config.set({currentDate: data.fullDate});
 		});
 		textSelection.exit().remove();
 		this.$monthHeading.html('Month of ' + $.datepicker.formatDate('MM', app.config.get('currentDate')));
@@ -218,7 +225,7 @@ app.MonthView = Backbone.View.extend({
 				var nutritionalData = filteredCollectionForDay(this.collection, newDate).reduce(function(previousValue, currentValue) {
 					return {calories: previousValue.calories + currentValue.get('calories')}
 				}, {calories: 0});
-				data.push({index: i, day: newDate.getDay(), week: Math.floor(i / 7), date: newDate.getDate(), calories: nutritionalData.calories});
+				data.push({index: i, day: newDate.getDay(), week: Math.floor(i / 7), date: newDate.getDate(), calories: nutritionalData.calories, fullDate: newDate});
 			} 
 			// else if (newDate.getMonth() > month || newDate.getFullYear() > year) {
 			// 	data.push({index: i, day: i % 7, week: Math.floor(i / 7), date: null, calories: null});
@@ -296,6 +303,9 @@ app.WeekView = Backbone.View.extend({
 					dayData.name = "Saturday";
 					break;
 			}
+			tag.on('click', function() {
+				app.config.set({currentDate: dayData.date});
+			});
 			var html = _.template(template)(dayData);
 			tag.html(html);
 		});
