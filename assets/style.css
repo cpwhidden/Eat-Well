@@ -117,7 +117,6 @@ li {
 
 .content-div {
 	padding: 5px 5px;
-	overflow: scroll;
 	min-height: 400px;
 	text-align: center;
 }
@@ -291,10 +290,6 @@ li {
 #food-list {
 	padding: 2px;
 	margin: 0;
-}
-
-#food-list-div {
-	overflow: scroll;
 }
 
 #day-chart-graphic, #week-chart-graphic, #month-chart-graphic {
