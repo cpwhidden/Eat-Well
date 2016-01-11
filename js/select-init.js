@@ -1,6 +1,6 @@
 // Select2 Box
 
-$('#food-search').select2({
+$('#food-search').select2({    
     // Retrieve info from Nutritionix API to display in select box
     ajax: {
         url: function(params) {
@@ -11,6 +11,7 @@ $('#food-search').select2({
         delay: 250,
         data: function (params) {
             return {
+                results: params.page ? resultRangeForPage(params.page, 15) : ('0:' + 15),
                 appId: '0b6341e3',
                 appKey: '8e568e8713b5c153220709a08b308919',
                 fields: 'item_name,nf_calories,nf_total_fat,nf_saturated_fat,nf_monounsaturated_fat,nf_polyunsaturated_fat,nf_trans_fatty_acid,nf_total_carbohydrate,nf_dietary_fiber,nf_sugars,nf_protein,nf_serving_size_qty,nf_serving_size_unit'
@@ -31,6 +32,7 @@ $('#food-search').select2({
         },
         error: function(xhr, status, error){
             // Display error message
+            $('#food-search-err-msg').remove();
             $('#select2-food-search-results').prepend('<span id="food-search-err-msg" style="color: red; padding-left: 5px">Error retrieving food search results</span>');
         },
         success: function() {
