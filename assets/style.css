@@ -200,7 +200,6 @@ li {
 }
 
 .week-day-list-item {
-	height: calc(100% / 7);
 	margin: 1px;
 	box-shadow: 0 0.5px 0 0 #ccc;
 }
@@ -281,6 +280,7 @@ li {
 	display: flex;
 	flex-direction: column;
 	flex-wrap: nowrap;
+	justify-content: space-between;
 }
 
 #week-chart {
