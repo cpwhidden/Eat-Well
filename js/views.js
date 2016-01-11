@@ -1,6 +1,9 @@
-var app = app || {};
 // Views
+var app = app || {};
 
+/*
+ ** App View **
+  			  */
 
 // App View
 app.AppView = Backbone.View.extend({
@@ -10,7 +13,10 @@ app.AppView = Backbone.View.extend({
 		_.bindAll(this, 'render');
 
 		this.listenTo(app.config, 'change:currentDate', this.dateChanged);
+
+		// Retrieve all saved models
 		app.ConsumptionHistory.fetch();
+
 		this.$previousDay = this.$('#previous-day-button');
 		this.$today = this.$('#goto-today-button');
 		this.$nextDay = this.$('#next-day-button');
@@ -29,6 +35,7 @@ app.AppView = Backbone.View.extend({
 	},
 
 	dateChanged : function() {
+		// If the current date changes, tell the router
 		app.DayFilter.navigate(app.config.get('currentDate').getFullYear() + '/' + 
 							  (app.config.get('currentDate').getMonth() + 1) + '/' + 
 							  (app.config.get('currentDate').getDate()), {trigger: false});
@@ -60,7 +67,11 @@ app.AppView = Backbone.View.extend({
 	}
 });
 
-// FoodItemView
+/*
+ ** Food Views **
+ 			    */
+
+// FoodItemView - consumed items in food list
 app.FoodItemView = Backbone.View.extend({
 	tagName: 'li',
 
@@ -103,7 +114,6 @@ app.FoodItemList = Backbone.View.extend({
 		
 		this.collection.bind('change', this.render);
 		this.collection.bind('add', this.testToAppend);
-		// this.collection.bind('remove', this.removeItem);
 	},
 
 	render : function() {
@@ -115,10 +125,10 @@ app.FoodItemList = Backbone.View.extend({
 
 	appendItem : function(item) {
 		var itemView = new app.FoodItemView({model: item});
-		var el = itemView.render().el;
 		$('ul', this.el).append(itemView.render().el);			
 	},
 
+	// Only append if the model is for the current day
 	testToAppend : function(item) {
 		if (datesMatch(app.config.get('currentDate'), new Date(item.get('dateTime')))) {
 			this.appendItem(item);
@@ -126,7 +136,7 @@ app.FoodItemList = Backbone.View.extend({
 	}
 });
 
-// ResultFoodView
+// ResultFoodView - representation of API results
 app.ResultFoodView = Backbone.View.extend({
 	tagName: 'div',
 
@@ -154,117 +164,34 @@ app.FoodSearchView = Backbone.View.extend({
 	},
 
 	resultSelected : function(food) {
-		var match = this.collection.where({id: food.params.data.id});
 		app.ConsumptionHistory.add(this.collection.where({id: food.params.data.id}));
 		$('#food-search').empty();
 	}
 });
 
-// Month View
-app.MonthView = Backbone.View.extend({
-	el: '#month-section',
-	collection : app.ConsumptionHistory,
+
+/*
+ ** Time Sections **
+				  */
+
+// Day View
+app.DayView = Backbone.View.extend({
+	el: '#day-section',
 
 	initialize : function() {
-		_.bindAll(this, 'render', 'dateWeekDataForDate', 'left', 'top');
+		_.bindAll(this, 'render');
+		this.$foodList = this.$('#food-list');
+		this.$dayHeading = this.$('#day-heading');
 
-		this.$monthHeading = this.$('#month-heading');
-		this.collection.bind('change add remove', this.render);
-		this.calendarDaySize = 40;
-		this.margin = 30;
-		this.width = $('#month-view').width();
-		this.height = 340;
+		this.foodItemList = new app.FoodItemList();
+		this.foodSearchView = new app.FoodSearchView();
+		this.render();
 	},
 
 	render : function() {
-		var self = this;
-		var monthData = this.dateWeekDataForDate(app.config.get('currentDate'));
-		var circleSelection = d3.select('#month-svg').selectAll('circle').data(monthData)
-		circleSelection.enter().append('circle');
-		circleSelection.data(monthData).attr('cx', function(data) {
-			return self.left() + data.day * self.calendarDaySize;
-		})
-		.attr('cy', function(data) {
-			return self.top() + data.week * self.calendarDaySize;
-		})
-		.attr('r', self.calendarDaySize / 2)
-		.attr('fill', '#D80')
-		.attr('opacity', function(data) {
-			return data.calories / 2000;	
-		})
-		.attr('index', function(data) {
-			return data.index;
-		})
-		.attr('unselectable', 'on')
-		.on('click', function(data) {
-			app.config.set({currentDate: data.fullDate});
-		});
-		circleSelection.exit().remove();
-
-		var textSelection = d3.select('#month-svg').selectAll('text').data(monthData);
-		textSelection.enter().append('text');
-		textSelection.data(monthData).attr('x', function(data){
-			return self.left() + data.day * self.calendarDaySize;
-		})
-		.attr('y', function(data) {
-			return self.top() + data.week * self.calendarDaySize;
-		})
-		.attr('width', self.calendarDaySize)
-		.attr('height', self.calendarDaySize)
-		.attr('fill', '#ccc')
-		.attr('text-anchor', 'middle')
-		.attr('dominant-baseline', 'middle')
-		.attr('font-size', '24px')
-		.text(function(data) {
-			return data.date;
-		})
-		.attr('text-decoration', function(data) {
-			if (datesMatch(data.fullDate, app.config.get('currentDate'))) {
-				return 'underline';
-			} else {
-				return 'inherit';
-			}
-		})
-		.attr('font-weight', function(data) {
-			if (datesMatch(data.fullDate, app.config.get('currentDate'))) {
-				return 'bolder';
-			} else {
-				return 'normal';
-			}
-		})
-		.on('click', function(data) {
-			app.config.set({currentDate: data.fullDate});
-		});
-		textSelection.exit().remove();
-		this.$monthHeading.html('Month of ' + $.datepicker.formatDate('MM', app.config.get('currentDate')));
+		this.$dayHeading.text($.datepicker.formatDate('MM d, yy', app.config.get('currentDate')));
+		this.foodItemList.render();
 		return this;
-	},
-
-	left : function() {
-		return (this.width - this.calendarDaySize * 6) / 2;
-	},
-
-	top : function() {
-		return (this.height - this.calendarDaySize * 4) / 2;
-	},
-
-	dateWeekDataForDate : function(date) {
-		var data = [];
-		var year = date.getFullYear();
-		var month = date.getMonth();
-		var firstDate = new Date(year, month, 1);
-		var firstDay = firstDate.getDay();
-
-		for (var i = firstDay; i < 42; i++) {
-			var newDate = new Date(year, month, i - firstDay + 1);
-			if (newDate.getMonth() == month) {
-				var nutritionalData = filteredCollectionForDay(this.collection, newDate).reduce(function(previousValue, currentValue) {
-					return {calories: previousValue.calories + currentValue.get('calories')}
-				}, {calories: 0});
-				data.push({index: i, day: newDate.getDay(), week: Math.floor(i / 7), date: newDate.getDate(), calories: nutritionalData.calories, fullDate: newDate});
-			} 
-		}
-		return data;
 	}
 });
 
@@ -337,6 +264,7 @@ app.WeekView = Backbone.View.extend({
 					break;
 			}
 			tag.off();
+			// If the div is clicked, change the current date for the app
 			tag.on('click', function() {
 				app.config.set({currentDate: dayData.date});
 			});
@@ -358,68 +286,124 @@ app.WeekView = Backbone.View.extend({
 
 });
 
-// Day View
-app.DayView = Backbone.View.extend({
-	el: '#day-section',
+// Month View
+app.MonthView = Backbone.View.extend({
+	el: '#month-section',
+	collection : app.ConsumptionHistory,
 
 	initialize : function() {
-		_.bindAll(this, 'render');
-		this.$foodList = this.$('#food-list');
-		this.$dayHeading = this.$('#day-heading');
+		_.bindAll(this, 'render', 'dateWeekDataForDate', 'left', 'top');
 
-		this.foodItemList = new app.FoodItemList();
-		this.foodSearchView = new app.FoodSearchView();
-		this.render();
+		this.$monthHeading = this.$('#month-heading');
+		this.collection.bind('change add remove', this.render);
+		this.calendarDaySize = 40;
+		this.margin = 30;
+		this.width = $('#month-view').width();
+		this.height = 340;
 	},
 
+	// Draw a calendar
 	render : function() {
-		this.$dayHeading.text($.datepicker.formatDate('MM d, yy', app.config.get('currentDate')));
-		this.foodItemList.render();
+		var self = this;
+		// Get all needed data for the month
+		var monthData = this.dateWeekDataForDate(app.config.get('currentDate'));
+
+		// Make a circle that becomes more opaque if more calories are eaten on that day
+		var circleSelection = d3.select('#month-svg').selectAll('circle').data(monthData);
+		circleSelection.enter().append('circle');
+		circleSelection.data(monthData).attr('cx', function(data) {
+			return self.left() + data.day * self.calendarDaySize;
+		})
+		.attr('cy', function(data) {
+			return self.top() + data.week * self.calendarDaySize;
+		})
+		.attr('r', self.calendarDaySize / 2)
+		.attr('fill', '#D80')
+		.attr('opacity', function(data) {
+			return data.calories / 2000;	
+		})
+		.attr('index', function(data) {
+			return data.index;
+		})
+		.attr('unselectable', 'on')
+		.on('click', function(data) {
+			app.config.set({currentDate: data.fullDate});
+		});
+		circleSelection.exit().remove();
+
+		// Text representing the day of the month
+		var textSelection = d3.select('#month-svg').selectAll('text').data(monthData);
+		textSelection.enter().append('text');
+		textSelection.data(monthData).attr('x', function(data){
+			return self.left() + data.day * self.calendarDaySize;
+		})
+		.attr('y', function(data) {
+			return self.top() + data.week * self.calendarDaySize;
+		})
+		.attr('width', self.calendarDaySize)
+		.attr('height', self.calendarDaySize)
+		.attr('fill', '#ccc')
+		.attr('text-anchor', 'middle')
+		.attr('dominant-baseline', 'middle')
+		.attr('font-size', '24px')
+		.text(function(data) {
+			return data.date;
+		})
+		.attr('text-decoration', function(data) {
+			if (datesMatch(data.fullDate, app.config.get('currentDate'))) {
+				return 'underline';
+			} else {
+				return 'inherit';
+			}
+		})
+		.attr('font-weight', function(data) {
+			if (datesMatch(data.fullDate, app.config.get('currentDate'))) {
+				return 'bolder';
+			} else {
+				return 'normal';
+			}
+		})
+		.on('click', function(data) {
+			app.config.set({currentDate: data.fullDate});
+		});
+		textSelection.exit().remove();
+		this.$monthHeading.html('Month of ' + $.datepicker.formatDate('MM', app.config.get('currentDate')));
 		return this;
+	},
+
+	left : function() {
+		return (this.width - this.calendarDaySize * 6) / 2;
+	},
+
+	top : function() {
+		return (this.height - this.calendarDaySize * 4) / 2;
+	},
+
+	dateWeekDataForDate : function(date) {
+		var data = [];
+		var year = date.getFullYear();
+		var month = date.getMonth();
+		var firstDate = new Date(year, month, 1);
+		var firstDay = firstDate.getDay();
+
+		// i is an index representing the placement in a calendar that includes the spaces before the 1st of the month
+		// i is later used by the month view to correct draw where the day should graphically be placed
+		for (var i = firstDay; i < 37; i++) {
+			var newDate = new Date(year, month, i - firstDay + 1);
+			if (newDate.getMonth() == month) {
+				var nutritionalData = filteredCollectionForDay(this.collection, newDate).reduce(function(previousValue, currentValue) {
+					return {calories: previousValue.calories + currentValue.get('calories')};
+				}, {calories: 0});
+				data.push({index: i, day: newDate.getDay(), week: Math.floor(i / 7), date: newDate.getDate(), calories: nutritionalData.calories, fullDate: newDate});
+			} 
+		}
+		return data;
 	}
 });
 
-datesMatch = function(date1, date2) {
-	return date1.getFullYear() == date2.getFullYear() 
-		&& date1.getMonth() == date2.getMonth() 
-		&& date1.getDate() == date2.getDate();
-};
-
-consumptionHistoryForDate = function(date) {
-	var filtered = app.ConsumptionHistory.filter(function(model) {
-		return datesMatch(new Date(model.get('dateTime')), date);
-	});
-	return filtered;
-};
-
-filteredCollectionForDay = function(collection, date) {
-	return collection.models.filter(function(item) {
-		return datesMatch(date, new Date(item.get('dateTime')));
-	}, this);
-};
-
-weeksMatch = function(date1, date2) {
-	return date1.getFullYear() == date2.getFullYear() 
-		&& date1.getMonth() == date2.getMonth()
-		&& (date1.getDay() - date2.getDay()) == (date1.getDate() - date2.getDate());
-};
-
-filteredCollectionForWeek = function(collection, date) {
-	return collection.models.filter(function(item) {
-		return weeksMatch(date, new Date(item.get('dateTime')));
-	}, this);
-};
-
-monthsMatch = function(date1, date2) {
-	return date1.getFullYear() == date2.getFullYear() 
-		&& date1.getMonth() == date2.getMonth();
-};
-
-filteredCollectionForMonth = function(collection, date) {
-	return collection.models.filter(function(item) {
-		return monthsMatch(date, new Date(item.get('dateTime')));
-	}, this);
-};
+/*
+ ** Supplementary Views *
+ 						*/
 
 // ArticleView
 app.ArticleView = Backbone.View.extend({
@@ -444,8 +428,6 @@ app.ArticleListView = Backbone.View.extend({
 
 	initialize : function() {
 		_.bindAll(this, 'render', 'request');
-
-		// app.ConsumptionHistory.on('add', this.render);
 	},
 
 	render : function() {
@@ -454,6 +436,7 @@ app.ArticleListView = Backbone.View.extend({
 		return this;
 	},
 
+	// Request articles from the New York Times
 	request : function() {
 		var self = this;
 		$('ul', self.$el).html('');
@@ -479,7 +462,7 @@ app.ArticleListView = Backbone.View.extend({
 			$('ul', self.$el).append('Unable to retrieve food articles');
 		});
 	}
-})
+});
 
 // RecipeView
 app.RecipeView = Backbone.View.extend({
@@ -512,6 +495,7 @@ app.RecipeListView = Backbone.View.extend({
 		return this;
 	},
 
+	// Request recipes from Yummly
 	request : function() {
 		var self = this;
 		$.ajax({
@@ -555,7 +539,10 @@ app.ChartView = Backbone.View.extend({
 
 	initialize : function(elementID, filter) {
 		_.bindAll(this, 'render', 'update', 'getData', 'width', 'height', 'circleCenterX', 'circleCenterY');
+		// Get the element that the chart will be for
 		this.el = document.getElementById(elementID);
+		// The filter is the function used to get the appropriate data (day, week, or month)
+		this.filter = filter;
 		this.strokeWidth = 20;
 		this.margin = this.strokeWidth / 2 + 20;
 		this.recommendedCalories = 2000;
@@ -563,38 +550,48 @@ app.ChartView = Backbone.View.extend({
 		this.height = 300;
 		this.centerX = this.width / 2;
 		this.centerY = this.height / 2;
+		this.radius = Math.min(this.centerX - this.margin, this.centerY - this.margin);
 		this.paper = Raphael(document.getElementById(elementID), this.width, this.height);
+		// Custom attributes needed to draw and animate arcs easily
 		this.paper.customAttributes.arc = this.pieArc;
-		this.filter = filter;
-		this.state = 0;  // Current drawing state of the graphic, used for animation transitions
 		this.collection.bind('change add remove', this.update);
 		this.render();
 	},
 
 	render : function() {
+		// Retrieve data for the graph
 		var data = this.getData();
 		var totalGrams = data.carbohydrates + data.fat + data.protein;
-		this.radius = Math.min(this.centerX - this.margin, this.centerY - this.margin);
+
+		// Draw a circle whose opacity represented the number of calories eaten
 		this.circle = this.paper.circle(this.centerX, this.centerY, this.radius);
 		this.circle.attr({
 			'fill': '#D80',
 			'stroke': '',
 			'opacity': 0.2 + data.calories / this.recommendedCalories / 0.8,
 		});
+
+		// Draw text that displays how many calories have been eaten
 		this.text = this.paper.text(this.width / 2, this.height / 2 - 10, data.calories.toFixed(0) + '\ncalories');
 		this.text.attr({'font-family' : 'sans-serif', 'font-size' : 40, 'font-weight' : 300, 'fill' : '#ddd'});
+
+		// Carbohydrate arc
 		this.carbohydrates = this.paper.path().attr({
 			'stroke': '#F55',
 			'stroke-width': this.strokeWidth, 
 			'stroke-linecap': 'round',
 			'arc' : [this.centerX, this.centerY, 0, data.carbohydrates, totalGrams, this.radius]
 		});
+
+		// Fat arc
 		this.fat = this.paper.path().attr({
 			'stroke': '#55F',
 			'stroke-width': this.strokeWidth,
 			'stroke-linecap': 'round',
 			'arc': [this.centerX, this.centerY, data.carbohydrates, data.fat , totalGrams, this.radius]
 		});
+
+		// Protein arc
 		this.protein = this.paper.path().attr({
 			'stroke': '#5F5',
 			'stroke-width': this.strokeWidth,
@@ -617,11 +614,15 @@ app.ChartView = Backbone.View.extend({
 		}
 	},
 
+	// Used as a custom attribute to easily draw and animate arcs
 	pieArc : function(xCenter, yCenter, preceedingTotal, value, totalValue, radius) {
+		// Angles go counter-clockwise and start at y-axis minimum. Subtracts 90 degrees to get there
+		// Start drawing where the previous total left off
 		var startingDegreeAngle = -90 - 360 * preceedingTotal / totalValue;
 		var degreeAngle = -360 * value / totalValue;
 		var startingRadians = startingDegreeAngle * Math.PI / 180;
 		var radians = degreeAngle * Math.PI / 180;
+		// If the value is a complete circle, make sure it draws correctly
 		if (value >= totalValue) {
 			return {
 				path: [['M', xCenter, yCenter - radius],
@@ -632,6 +633,7 @@ app.ChartView = Backbone.View.extend({
 			var sourceY = yCenter + radius * Math.sin(startingRadians);
 			var destinationX = xCenter + radius * Math.cos(startingRadians + radians);
 			var destinationY = yCenter + radius * Math.sin(startingRadians + radians);
+			// If the path is greater than 50% of a circle, you need to use the large-arc flag
 			var path = {
 				path: [['M', sourceX, sourceY],
 						['A', radius, radius, 0, ((value / totalValue) > 0.5 ? 1 : 0), (value < 0) ? 1 : 0, destinationX, destinationY]]
@@ -657,6 +659,7 @@ app.ChartView = Backbone.View.extend({
 	},
 
 	update : function() {
+		// Update SVG elements with animation to the appropriate spot when new data is available
 		var ms = 750;
 		var data = this.getData();
 		var totalGrams = data.carbohydrates + data.fat + data.protein;
@@ -669,6 +672,7 @@ app.ChartView = Backbone.View.extend({
 	},
 
 	getData : function() {
+		// Get nutritional info for the appropriate collection
 		var filteredCollection = this.filter(this.collection, app.config.get('currentDate'));
 		var data = filteredCollection.reduce(function(previousValue, currentValue) {
 			return {calories: previousValue.calories + currentValue.get('calories'), 
@@ -678,11 +682,60 @@ app.ChartView = Backbone.View.extend({
 		}, {calories: 0, carbohydrates: 0, fat: 0, protein: 0});
 		return data;
 	}
-})
+});
+
+
+/*
+ ** Utility Functions **
+         			   */
+
+datesMatch = function(date1, date2) {
+	return date1.getFullYear() == date2.getFullYear() &&
+		date1.getMonth() == date2.getMonth() &&
+		date1.getDate() == date2.getDate();
+};
+
+consumptionHistoryForDate = function(date) {
+	var filtered = app.ConsumptionHistory.filter(function(model) {
+		return datesMatch(new Date(model.get('dateTime')), date);
+	});
+	return filtered;
+};
+
+filteredCollectionForDay = function(collection, date) {
+	return collection.models.filter(function(item) {
+		return datesMatch(date, new Date(item.get('dateTime')));
+	}, this);
+};
+
+weeksMatch = function(date1, date2) {
+	return date1.getFullYear() == date2.getFullYear() &&
+		date1.getMonth() == date2.getMonth() &&
+		(date1.getDay() - date2.getDay()) == (date1.getDate() - date2.getDate());
+};
+
+filteredCollectionForWeek = function(collection, date) {
+	return collection.models.filter(function(item) {
+		return weeksMatch(date, new Date(item.get('dateTime')));
+	}, this);
+};
+
+monthsMatch = function(date1, date2) {
+	return date1.getFullYear() == date2.getFullYear() &&
+		date1.getMonth() == date2.getMonth();
+};
+
+filteredCollectionForMonth = function(collection, date) {
+	return collection.models.filter(function(item) {
+		return monthsMatch(date, new Date(item.get('dateTime')));
+	}, this);
+};
+
+/*
+ ** Initialize app logic **
+ 						  */
 
 // Connect app logic to the DOM
 $(function() {
-
   	new app.AppView();
-
 });

@@ -1,4 +1,4 @@
-// models
+// Models
 var app = app || {};
 
 // FoodItem
@@ -20,7 +20,7 @@ app.FoodItem = Backbone.Model.extend({
 		quantity : 0,
 		unit : ''
 	}
-})
+});
 
 // Recipe
 app.Recipe = Backbone.Model.extend({
@@ -29,7 +29,7 @@ app.Recipe = Backbone.Model.extend({
 		url : 'food2fork.com',
 		rating : '0'
 	}
-})
+});
 
 // Article
 app.Article = Backbone.Model.extend({
@@ -38,12 +38,12 @@ app.Article = Backbone.Model.extend({
 		snippet : 'Snippet',
 		url : 'nytimes.com'
 	}
-})
+});
 
-// app
+// Config - Holds global variables
 app.Config = Backbone.Model.extend({
 	defaults : {
 		currentDate : new Date()
 	}
-})
+});
 app.config = new app.Config();

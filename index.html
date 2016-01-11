@@ -1,5 +1,6 @@
 <!doctype html>
 <head>
+	<title>Eat Well</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="assets/bootstrap.css">
@@ -7,13 +8,12 @@
 	<link rel="stylesheet" type="text/css" href="assets/style.css">
 	<link rel="stylesheet" type="text/css" href="assets/select2.css">
 </head>
-<title>Eat Well</title>
 <body>
 	<main id="app" class="container">
 		<section id="title" class="banner">
 			<div id="title-inner" class="col-md-12 col-xs-12 banner-inner">
 				<div id="title-icon">
-					<img src="assets/images/face.png" srcset="assets/images/face.png 1x, assets/images/face@2x.png" alt="Eat Well"/>
+					<img src="assets/images/face.png" srcset="assets/images/face.png 1x, assets/images/face@2x.png 2x" alt="Eat Well"/>
 				</div>
 				<div id="title-name">
 					<h1>Eat Well</h1>
@@ -24,9 +24,9 @@
 			</div>
 		</section>
 		<div id="nav-bar" class="btn-group">
-			<button id="previous-day-button" class="btn btn-default" type="button"><</button>	
+			<button id="previous-day-button" class="btn btn-default" type="button">&lt;</button>	
 			<button id="goto-today-button" class="btn btn-default">Today</button>
-			<button id="next-day-button" class="btn btn-default">></button>
+			<button id="next-day-button" class="btn btn-default">&gt;</button>
 		</div>
 		<section id="food-consumption" class="prominent-section">
 			<section id="day-section" class="col-xs-12 col-sm-12 col-md-4 time-section">
@@ -47,15 +47,15 @@
 						</div>
 						<div id="day-chart-legend" class="legend">
 							<div class="legend-carbohydrates legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"></rect></svg>
 								<span class="carb-text legend-text">Carbohydrates</span>
 							</div>
 							<div class="legend-fat legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"></rect></svg>
 								<span class="fat-text legend-text">Fat</span>
 							</div>
 							<div class="legend-protein legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"></rect></svg>
 								<span class="protein-text legend-text">Protein</span>
 							</div>
 						</div>
@@ -87,17 +87,17 @@
 <!-- 						<h2>Week Chart</h2>
  -->						<div id="week-chart-graphic" class="chart-graphic">
 						</div>
-						<div id="day-chart-legend" class="legend">
+						<div id="week-chart-legend" class="legend">
 							<div class="legend-carbohydrates legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"></rect></svg>
 								<span class="carb-text legend-text">Carbohydrates</span>
 							</div>
 							<div class="legend-fat legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"></rect></svg>
 								<span class="fat-text legend-text">Fat</span>
 							</div>
 							<div class="legend-protein legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"></rect></svg>
 								<span class="protein-text legend-text">Protein</span>
 							</div>
 						</div>
@@ -114,17 +114,17 @@
 <!-- 						<h2>Month Chart</h2>
  -->						<div id="month-chart-graphic" class="chart-graphic">
 						</div>
-						<div id="day-chart-legend" class="legend">
+						<div id="month-chart-legend" class="legend">
 							<div class="legend-carbohydrates legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#F55" rx="2"></rect></svg>
 								<span class="carb-text legend-text">Carbohydrates</span>
 							</div>
 							<div class="legend-fat legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#55F" rx="2"></rect></svg>
 								<span class="fat-text legend-text">Fat</span>
 							</div>
 							<div class="legend-protein legend-section">
-								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"><rect></svg>
+								<svg width="30" height="20"><rect x="0" y="0" width="30" height="20" fill="#5F5" rx="2"></rect></svg>
 								<span class="protein-text legend-text">Protein</span>
 							</div>
 						</div>
@@ -147,9 +147,11 @@
 			</div>
 		</section>
 		<section id="attribution">
-			<img src="https://d3jpl91pxevbkh.cloudfront.net/nutritionix/image/upload/v1363458498/attribution_jqfdgy.png" border="0">
+			<img src="https://d3jpl91pxevbkh.cloudfront.net/nutritionix/image/upload/v1363458498/attribution_jqfdgy.png" alt="Powered by the Nutritionix API">
 		</section>
 	</main>
+
+	<!-- Templates -->
 	<script id="consumed-food-template" type="text/template">
 		<div class="consumed-food-item">
 			<div class="food-result-main-content">
@@ -210,6 +212,8 @@
 			</span>
 		</div>
 	</script>
+
+	<!-- Imported scripts -->
 	<script src="js/lib/jquery-1.11.3.js"></script>
 	<script src="js/lib/jquery-ui.js"></script>
 	<script src="js/lib/underscore.js"></script>
