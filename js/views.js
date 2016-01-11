@@ -622,10 +622,10 @@ app.ChartView = Backbone.View.extend({
 		var degreeAngle = -360 * value / totalValue;
 		var startingRadians = startingDegreeAngle * Math.PI / 180;
 		var radians = degreeAngle * Math.PI / 180;
-		if (value == totalValue) {
+		if (value >= totalValue) {
 			return {
 				path: [['M', xCenter, yCenter - radius],
-						['A', radius, radius, 0, 1, 0, xCenter - 0.001, yCenter - radius]]
+						['A', radius, radius, 0, 1, 1, xCenter - 0.01, yCenter - radius]]
 			};
 		} else {
 			var sourceX = xCenter + radius * Math.cos(startingRadians);
@@ -634,7 +634,7 @@ app.ChartView = Backbone.View.extend({
 			var destinationY = yCenter + radius * Math.sin(startingRadians + radians);
 			var path = {
 				path: [['M', sourceX, sourceY],
-						['A', radius, radius, 0, ((value / totalValue) > 0.5 ? 1 : 0), 0, destinationX, destinationY]]
+						['A', radius, radius, 0, ((value / totalValue) > 0.5 ? 1 : 0), (value < 0) ? 1 : 0, destinationX, destinationY]]
 			};
 			return path;
 		}
