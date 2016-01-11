@@ -1,0 +1,35 @@
+{
+  "name": "eat-well",
+  "version": "1.0.0",
+  "description": "Records a user's consumption history and displays summary information and graphs on the content of the food.",
+  "main": "index.html",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cpwhidden/Eat-Well.git"
+  },
+  "keywords": [
+    "food",
+    "calories",
+    "carbohydrates",
+    "fat",
+    "protein",
+    "nutritionix",
+    "eat",
+    "well"
+  ],
+  "author": "Christopher Whidden",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cpwhidden/Eat-Well/issues"
+  },
+  "homepage": "https://github.com/cpwhidden/Eat-Well#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-uglify": "^0.11.0"
+  }
+}
