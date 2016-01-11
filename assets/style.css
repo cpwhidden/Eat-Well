@@ -45,6 +45,14 @@ h2 {
 	margin: 0 auto 10px auto;
 }
 
+ul {
+	padding: 0 5px;
+}
+
+li {
+	display: block;
+}
+
 .month-svg text:hover, .month-svg circle:hover {
 	cursor: pointer;
 }
@@ -60,10 +68,6 @@ h2 {
 .row > div {
 	height: 100%;
 	max-height: 100%;
-}
-
-#nav-bar {
-	margin-top: 30px;
 }
 
 .banner {
@@ -82,14 +86,6 @@ h2 {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-}
-
-#title-icon {
-	width: 20%;
-}
-
-#title-name {
-	margin: auto 0 auto 10px;
 }
 
 .container {
@@ -158,16 +154,9 @@ h2 {
 	font-size: larger;
 }
 
-.banner-inner {
-}
-
 .select2-search, .select2-search input, .select2-results, .select2 {
 	background-color: #202040;
 	color: #ccc;
-}
-
-#select2-food-search-results {
-	max-height: 300px;
 }
 
 .select2-selection {
@@ -178,47 +167,12 @@ h2 {
 	color: #000 !important;
 }
 
-#food-list {
-	padding: 2px;
-	margin: 0;
-}
-
-#food-search {
-	height: 40px;
-}
-
-#nav-bar {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: center;
-	height: 40px;
-}
-
-#week-chart {
-	background-color: #111130;
-}
-
 .section-heading {
 	text-align: center;
 }
 
 .week-day-list-item:hover {
 	cursor: pointer;
-}
-
-#day-chart-graphic, #week-chart-graphic, #month-chart-graphic {
-	min-height: 300px;
-	height: 100%;
-	width: 100%;
-	margin: auto;
-}
-
-#week-day-list {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
 }
 
 .legend {
@@ -256,10 +210,6 @@ h2 {
 	box-shadow: 0 0 0 0 #ccc;
 }
 
-#food-list-div {
-	overflow: scroll;
-}
-
 .calories-text {
 	color: #D80;
 }
@@ -294,11 +244,6 @@ h2 {
 	font-weight: 500;
 }
 
-#month-svg {
-	width: 100%;
-	height: 380px;
-}
-
 .article {
 	margin-bottom: 5px;
 }
@@ -307,17 +252,66 @@ h2 {
 	margin-bottom: 15px;
 }
 
+#title-icon {
+	width: 20%;
+}
+
+#title-name {
+	margin: auto 0 auto 10px;
+}
+
+#nav-bar {
+	margin-top: 30px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	height: 40px;
+}
+
+#select2-food-search-results {
+	max-height: 300px;
+}
+
+#food-search {
+	height: 40px;
+}
+
+#week-day-list {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+}
+
+#week-chart {
+	background-color: #111130;
+}
+
+#food-list {
+	padding: 2px;
+	margin: 0;
+}
+
+#food-list-div {
+	overflow: scroll;
+}
+
+#day-chart-graphic, #week-chart-graphic, #month-chart-graphic {
+	min-height: 300px;
+	height: 100%;
+	width: 100%;
+	margin: auto;
+}
+
+#month-svg {
+	width: 100%;
+	height: 380px;
+}
+
 #attribution {
 	margin-top: 20px;
 	text-align: center;
-}
-
-ul {
-	padding: 0 5px;
-}
-
-li {
-	display: block;
 }
 
 #supplementary-info {
