@@ -40,16 +40,10 @@ app.Article = Backbone.Model.extend({
 	}
 })
 
-// API
-app.API = Backbone.Model.extend({
-
-})
-
 // app
 app.Config = Backbone.Model.extend({
 	defaults : {
 		currentDate : new Date()
 	}
 })
-
 app.config = new app.Config();
